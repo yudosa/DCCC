@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 시설 이용 현황</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script type="module" src="firebase-config.js"></script>
+    <style>
+        .status-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .status-title { font-size: 1.5rem; font-weight: bold; }
+        .date-picker-row { display: flex; align-items: center; gap: 8px; }
+        .date-input { border: 1px solid #ccc; border-radius: 6px; padding: 6px 10px; font-size: 1rem; }
+        .calendar-icon { cursor: pointer; font-size: 1.3rem; color: #007bff; margin-left: -28px; }
+        .timeline-table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #fff; }
+        .timeline-table th, .timeline-table td { border: 1px solid #e0e0e0; text-align: center; padding: 6px 2px; font-size: 0.95rem; }
+        .timeline-table th { background: #f7f7f7; font-weight: 600; }
+        .space-label { font-weight: 600; background: #f3f6fa; }
+        .reservation-cell { border-radius: 6px; background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%); color: #222; font-weight: 500; padding: 2px 4px; margin: 1px 0; }
+        .empty-cell { background: #fafbfc; }
+        .category-row { margin-bottom: 10px; }
+        .category-btn { background: #f2f2f2; border: none; border-radius: 20px; padding: 6px 18px; margin: 0 4px 8px 0; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
+        .category-btn.active, .category-btn:hover { background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%); color: #222; }
+        @media (max-width: 700px) {
+            .timeline-table th, .timeline-table td { font-size: 0.8rem; padding: 3px 1px; }
+            .status-title { font-size: 1.1rem; }
+        }
+        /* 타임라인 가로 스크롤, 공간명 sticky, 반응형 */
+        .timeline-scroll-x { overflow-x: auto; width: 100%; }
+        .timeline-table { min-width: 700px; border-collapse: collapse; background: #fff; }
+        .timeline-table th, .timeline-table td { border: 1px solid #e0e0e0; text-align: center; padding: 6px 2px; font-size: 0.95rem; }
+        .timeline-table th { background: #f7f7f7; font-weight: 600; }
+        .space-label { font-weight: 600; background: #f3f6fa; position: sticky; left: 0; z-index: 2; }
+        .timeline-table th:first-child, .timeline-table td:first-child { position: sticky; left: 0; background: #f3f6fa; z-index: 3; }
+        .reservation-cell { border-radius: 6px; background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%); color: #222; font-weight: 500; padding: 2px 4px; margin: 1px 0; }
+        .empty-cell { background: #fafbfc; }
+        @media (max-width: 900px) {
+            .timeline-table { min-width: 600px; }
+        }
+        @media (max-width: 700px) {
+            .timeline-table th, .timeline-table td { font-size: 0.8rem; padding: 3px 1px; }
+            .main-card h1, .main-card h2 { font-size: 1.2rem !important; }
+        }
+        .calendar-modal-bg {
+            position: fixed;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.35);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+        .calendar-modal {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px #a8edea55;
+            padding: 32px 24px 24px 24px;
+            min-width: 320px;
+            max-width: 95vw;
+            text-align: center;
+            position: relative;
+        }
+        .calendar-modal .calendar-header {
+            display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 18px;
+        }
+        .calendar-modal .calendar-title {
+            font-size: 1.45rem; font-weight: 700; color: #222; letter-spacing: 1px;
+        }
+        .calendar-modal .calendar-nav-btn {
+            background: linear-gradient(90deg, #ffd6e3 0%, #a8edea 100%);
+            border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; color: #ff6f61; font-weight: 700; box-shadow: 0 2px 8px #ffd6e322; cursor: pointer; transition: background 0.18s, color 0.18s, transform 0.18s;
+        }
+        .calendar-modal .calendar-nav-btn:hover {
+            background: linear-gradient(90deg, #a8edea 0%, #ffd6e3 100%); color: #d84315; transform: scale(1.08);
+        }
+        .calendar-modal .reservation-calendar {
+            width: 100%; max-width: 320px; border-collapse: separate; border-spacing: 0 8px;
+        }
+        .calendar-modal .reservation-calendar th {
+            font-size: 1.12rem; color: #3498db; font-weight: 700; padding-bottom: 8px;
+        }
+        .calendar-modal .reservation-calendar td { text-align: center; padding: 0; }
+        .calendar-modal .calendar-day {
+            width: 38px; height: 38px; line-height: 38px; font-size: 1.08rem; font-weight: 600; border-radius: 50%; background: #fff; color: #222; margin: 0 auto; cursor: pointer; transition: background 0.18s, color 0.18s, box-shadow 0.18s; box-shadow: 0 1px 4px #3498db11; border: 2px solid transparent;
+        }
+        .calendar-modal .calendar-day.selected {
+            background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%); color: #fff; border: 2px solid #3498db; box-shadow: 0 4px 16px #3498db22;
+        }
+        .calendar-modal .calendar-day.disabled {
+            background: #f0f0f0; color: #bbb; cursor: not-allowed; text-decoration: line-through;
+        }
+        .calendar-modal .calendar-day:not(.selected):hover:not(.disabled) {
+            background: #e0f7fa; color: #3498db; border: 2px solid #a8edea;
+        }
+        .calendar-modal .calendar-modal-close {
+            position: absolute; top: 12px; right: 18px; background: none; border: none; font-size: 1.5rem; color: #aaa; cursor: pointer;}
+        .calendar-modal .calendar-modal-close:hover { color: #e74c3c; }
+        .reservation-cell-disabled {
+            background-color: #f8f9fa !important;
+            color: #6c757d !important;
+            cursor: not-allowed;
+        }
+        
+        .reservation-cell-cancelled {
+            background-color: #f8d7da !important;
+            color: #721c24 !important;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .reservation-cell-cancelled:hover {
+            background-color: #f5c6cb !important;
+        }
+        /* 간트차트 스타일 추가 */
+        .gantt-timeline-scroll-x {
+            overflow-x: auto;
+            width: 100%;
+            min-width: 0;
+            white-space: nowrap;
+        }
+        .gantt-timeline-container {
+            background: #f7fafd;
+            border-radius: 18px;
+            padding: 18px 0 18px 0;
+            box-shadow: 0 4px 24px #e0e7ef22;
+            min-width: 1200px;
+        }
+        .gantt-timeline-header {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: center;
+            min-width: 1200px;
+        }
+        .gantt-timeline-header .room-label {
+            width: 120px;
+            font-weight: 700;
+            color: #444;
+            background: #f3f6fa;
+            border-radius: 12px;
+            padding: 8px 0;
+            text-align: center;
+        }
+        .gantt-timeline-header .time-slot {
+            flex: 1 1 0;
+            text-align: center;
+            font-size: 1.05rem;
+            color: #888;
+            font-weight: 700;
+            border-right: 2px solid #e0e7ef;
+            position: relative;
+            min-width: 80px;
+            max-width: 120px;
+        }
+        .gantt-timeline-header .time-slot:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 50%;
+            top: 0; bottom: 0;
+            width: 0;
+            border-right: 1px dashed #e0e7ef;
+            opacity: 0.7;
+        }
+        .gantt-timeline-row {
+            display: flex;
+            align-items: center;
+            height: 32px;
+            position: relative;
+            background: #fff;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px #e0e7ef33;
+            min-width: 1200px;
+        }
+        .gantt-timeline-row .room-label {
+            width: 120px;
+            font-weight: 700;
+            color: #444;
+            background: #f3f6fa;
+            border-radius: 12px;
+            padding: 8px 0;
+            text-align: center;
+            z-index: 2;
+        }
+        .gantt-timeline-row .gantt-bar {
+            position: absolute;
+            top: 4px;
+            height: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #b2bec333;
+            font-weight: 700;
+            font-size: 1.01rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 14px;
+            z-index: 1;
+            transition: left 0.2s, width 0.2s;
+            min-width: 60px;
+            max-width: 180px;
+        }
+        .gantt-bar.bar-blue    { background: linear-gradient(90deg, #1da1f2 60%, #0066ff 100%); color: #fff; box-shadow: 0 2px 8px #1da1f288; }
+        .gantt-bar.bar-pink    { background: linear-gradient(90deg, #ff4f81 60%, #ff6a00 100%); color: #fff; box-shadow: 0 2px 8px #ff4f8188; }
+        .gantt-bar.bar-mint    { background: linear-gradient(90deg, #00e6d3 60%, #00b894 100%); color: #fff; box-shadow: 0 2px 8px #00e6d388; }
+        .gantt-bar.bar-lavender{ background: #c3b6f7; color: #5e548e; }
+        .gantt-bar.bar-yellow  { background: linear-gradient(90deg, #ffe156 60%, #ffd600 100%); color: #222; box-shadow: 0 2px 8px #ffe15688; }
+        .gantt-bar.bar-purple  { background: linear-gradient(90deg, #7c5fff 60%, #4e54c8 100%); color: #fff; box-shadow: 0 2px 8px #7c5fff88; }
+        .gantt-timeline-row .gantt-bar:not(:last-child) { margin-right: 6px; }
+        .gantt-timeline-row .gantt-bar .bar-name {
+            font-weight: 700;
+            font-size: 1em;
+            line-height: 1.1;
+            margin: 0;
+        }
+        .gantt-bar.bar-yellow .bar-time { color: #444; }
+        .gantt-bar.bar-yellow .bar-name { color: #222; }
+        .main-card {
+            overflow-x: auto;
+        }
+        .td-half { position: relative; height: 36px; padding: 0; }
+        .half-cell { position: absolute; left: 0; width: 100%; height: 50%; line-height: 18px; font-size: 0.9em; }
+        .half-cell.top { top: 0; border-bottom: 1px solid #eee; }
+        .half-cell.bottom { bottom: 0; }
+        .gantt-timeline-bar-disabled {
+            opacity: 0.5;
+            filter: grayscale(0.3);
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        .gantt-timeline-table {
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            width: 100%;
+            background: transparent;
+        }
+        .gantt-timeline-table th, .gantt-timeline-table td {
+            border: none;
+            padding: 12px 8px;
+            font-size: 1.05rem;
+        }
+        .gantt-timeline-table th {
+            background: #f7f7fa;
+            font-weight: 700;
+            border-radius: 12px 12px 0 0;
+            color: #1976d2;
+        }
+        .gantt-cell {
+            background: #fafbfc;
+            border-radius: 12px;
+            min-width: 80px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .gantt-bar {
+            display: inline-block;
+            border-radius: 8px;
+            padding: 4px 16px;
+            margin: 2px 2px;
+            font-weight: 600;
+            color: #fff;
+            box-shadow: 0 2px 8px #0001;
+            background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
+            font-size: 1rem;
+        }
+        .gantt-bar.bar-blue    { background: linear-gradient(90deg, #1da1f2 60%, #0066ff 100%); color: #fff; box-shadow: 0 2px 8px #1da1f288; }
+        .gantt-bar.bar-pink    { background: linear-gradient(90deg, #ff4f81 60%, #ff6a00 100%); color: #fff; box-shadow: 0 2px 8px #ff4f8188; }
+        .gantt-bar.bar-mint    { background: linear-gradient(90deg, #00e6d3 60%, #00b894 100%); color: #fff; box-shadow: 0 2px 8px #00e6d388; }
+        .gantt-bar.bar-lavender{ background: #c3b6f7; color: #5e548e; }
+        .gantt-bar.bar-yellow  { background: linear-gradient(90deg, #ffe156 60%, #ffd600 100%); color: #222; box-shadow: 0 2px 8px #ffe15688; }
+        .gantt-bar.bar-purple  { background: linear-gradient(90deg, #7c5fff 60%, #4e54c8 100%); color: #fff; box-shadow: 0 2px 8px #7c5fff88; }
+        .gantt-bar {
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #b2bec333;
+            font-weight: 600;
+            padding: 6px 18px;
+            min-width: 60px;
+            max-width: 120px;
+            font-size: 1.05rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 auto;
+            display: inline-block;
+            position: absolute;
+            top: 6px;
+            height: 32px;
+        }
+        .bar-half-left {
+            left: 4px;
+            width: calc(50% - 6px);
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
+        }
+        .bar-half-right {
+            right: 4px;
+            width: calc(50% - 6px);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+        .bar-full {
+            left: 4px;
+            width: calc(100% - 8px);
+        }
+        .gantt-timeline-table {
+            border-collapse: separate;
+            border-spacing: 0 14px;
+            background: #fff;
+        }
+        .gantt-timeline-table th, .gantt-timeline-table td {
+            border: none;
+            font-size: 1rem;
+            padding: 8px 2px;
+        }
+        .gantt-timeline-table th {
+            background: #f7fafd;
+            font-weight: 700;
+            color: #888;
+        }
+        .gantt-cell {
+            border-right: 1.5px dashed #e0e7ef;
+            background: transparent;
+            min-width: 38px;
+            height: 44px;
+            position: relative;
+        }
+        .room-label {
+            font-weight: 700;
+            color: #444;
+            background: #f3f6fa;
+            border-radius: 12px;
+            padding: 8px 0;
+        }
+        .bar-tooltip {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #fff;
+            color: #222;
+            border: 1.5px solid #b0b8c1;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px #0002;
+            padding: 6px 14px;
+            font-size: 1.05em;
+            font-weight: 600;
+            z-index: 100;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .gantt-bar.disabled {
+            opacity: 0.5 !important;
+            filter: grayscale(0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container vertical-layout">
+        <div class="banner-section">
+            <div class="current-datetime"></div>
+            <div class="banner-image">
+                <div class="image-slider">
+                    <img src="dc1.jpg" alt="동천청소년 문화의집 건물" class="main-building-img active">
+                    <img src="dc2.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                    <img src="dc3.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                    <img src="dc4.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                    <img src="dc5.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                    <img src="dc6.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                    <img src="dc7.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                    <img src="dc8.jpg" alt="동천청소년 문화의집 건물" class="main-building-img">
+                </div>
+                <div class="slider-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+        <!-- 타임라인 카드 -->
+        <div class="main-card" style="background:#fff; border-radius:28px; box-shadow:0 4px 24px #e0e7ef22; max-width:900px; width:90vw; margin:32px auto 0 auto; padding:26px 16px 21px 16px; text-align:center;">
+            <h2 style="font-size:1.5rem; font-weight:800; color:#e74c3c; margin-bottom:7px;">이용현황 조회</h2>
+            <div style="font-size:1.12rem; color:#555; text-align:center; margin-bottom:21px;">시간대별 예약 현황을 확인하세요.</div>
+            <!-- 날짜/기간/CSV 다운로드 UI -->
+            <div class="status-header" style="justify-content:center; flex-wrap:wrap; gap:12px;">
+                <div class="date-picker-row" style="display:flex; align-items:center; gap:10px;">
+                    <span id="formattedDate" style="font-size:1.1rem; font-weight:600; padding:7px 16px; border:1px solid #ccc; border-radius:6px; background:#fff; display:inline-block; min-width:170px;"></span>
+                    <input type="date" id="statusDate" class="date-input" style="display:none;">
+                    <i class="fa-regular fa-calendar calendar-icon" id="calendarIcon" style="margin-left:10px; vertical-align:middle; font-size:1.3rem;"></i>
+                </div>
+                <div id="csvRangeWrap" style="display:none; align-items:center; gap:8px; margin-left:18px;">
+                    <span style="font-size:0.98rem; color:#888;">기간:</span>
+                    <button id="csvStartBtn" class="btn-secondary-centered" style="padding:6px 18px; font-size:1rem; color:#222; min-width:120px;"></button>
+                    ~
+                    <button id="csvEndBtn" class="btn-secondary-centered" style="padding:6px 18px; font-size:1rem; color:#222; min-width:120px;"></button>
+                    <button id="csvDownloadBtn" class="btn-secondary-centered" style="margin-left:8px; color:#222; font-size:1rem; padding:6px 10px;"><span style="font-size:1.15em;margin-right:6px;">📥</span>자료 받기</button>
+                </div>
+            </div>
+            <div class="category-row" id="categoryRow" style="margin-top:18px;"></div>
+            <div id="ganttTimelineWrap" style="margin-top:18px;">
+                <div class="gantt-timeline-scroll-x"></div>
+            </div>
+            <div class="form-actions-centered" style="margin-top:32px;" id="timelineActions">
+                <button class="btn-secondary-centered" onclick="location.href='index.html'" style="color:#222;" id="btnBack">◀ 이전</button>
+                <button class="btn-secondary-centered" onclick="location.href='admin.html'" style="color:#222;" id="btnAdmin">🛠️ 관리자모드</button>
+                <button class="btn-secondary-centered" style="color:#222; display:none;" id="btnNormal">일반모드로 전환</button>
+            </div>
+        </div>
+    </div>
+    <!-- 관리자 워터마크 -->
+    <div id="adminWatermark" style="display:none; position:fixed; top:24px; right:24px; z-index:1001; pointer-events:none; font-size:1.25rem; font-weight:900; color:#e74c3c; opacity:0.18; user-select:none;">관리자 모드</div>
+    <script>
+    // 샘플 공간/시설 목록 (세부시설 포함)
+    const spaces = [
+        { name: '댄스연습실', id: 'dance' },
+        { name: '소회의실', id: 'meeting' },
+        { name: '닌텐도', id: 'nintendo', details: ['닌텐도1','닌텐도2','닌텐도3'] },
+        { name: '플레이스테이션', id: 'ps', details: ['플레이스테이션1','플레이스테이션2','플레이스테이션3'] },
+        { name: '노래방', id: 'karaoke', details: ['노래방1','노래방2'] }
+    ];
+    // 샘플 카테고리(필터)
+    const categories = ['전체', '댄스연습실', '소회의실', '닌텐도', '플레이스테이션', '노래방'];
+    // 샘플 예약 데이터(detail 필드 포함)
+    async function getSampleReservations(date) {
+        if (!date) {
+            const today = new Date();
+            date = formatDateToYYYYMMDD(today);
+        }
+        
+        try {
+            const response = await fetch(`/api/reservations/date/${date}`);
+            if (!response.ok) {
+                throw new Error('예약 데이터를 불러올 수 없습니다.');
+            }
+            
+            const reservations = await response.json();
+            
+            // API 데이터를 타임라인 형식으로 변환 (활성 예약만)
+            return reservations
+                .filter(reservation => reservation.status === 'active') // 활성 예약만 필터링
+                .map(reservation => ({
+                    id: reservation.id,
+                    date: reservation.date,
+                    space: reservation.facility,
+                    detail: reservation.detail !== '-' ? reservation.detail : null,
+                    start: parseInt(reservation.start_time.split(':')[0]),
+                    end: parseInt(reservation.end_time.split(':')[0]),
+                    start_time: reservation.start_time,
+                    end_time: reservation.end_time,
+                    name: reservation.name,
+                    phone: reservation.phone,
+                    purpose: reservation.purpose,
+                    status: reservation.status
+                }));
+            
+        } catch (error) {
+            console.error('예약 데이터 로드 오류:', error);
+            return []; // 오류 시 빈 배열 반환
+        }
+    }
+    // 1시간 단위 헤더 생성 (일요일은 18시까지)
+    function getHourSlots(startHour = 9, endHour = 20, isSunday = false) {
+        const slots = [];
+        const actualEndHour = isSunday ? 18 : endHour;
+        for (let h = startHour; h < actualEndHour; h++) {
+            slots.push(`${String(h).padStart(2, '0')}:00`);
+        }
+        return slots;
+    }
+    // 30분 단위 구간 반환
+    function get30MinRanges(hour) {
+        const h = String(hour).padStart(2, '0');
+        return [
+            { start: `${h}:00`, end: `${h}:30` },
+            { start: `${h}:30`, end: `${String(Number(h)+1).padStart(2, '0')}:00` }
+        ];
+    }
+    // 카테고리 버튼 렌더링
+    const categoryRow = document.getElementById('categoryRow');
+    let selectedCategory = '전체';
+    function renderCategories() {
+        categoryRow.innerHTML = '';
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'category-btn' + (cat===selectedCategory?' active':'');
+            btn.textContent = cat;
+            btn.onclick = async () => {
+                selectedCategory = cat;
+                renderCategories();
+                await loadAndRenderGanttTimeline(selectedCategory);
+            };
+            categoryRow.appendChild(btn);
+        });
+    }
+    // 관리자 모드 활성화
+    function isAdmin() { return sessionStorage.getItem('isAdmin')==='1'; }
+    function showAdminUI() {
+        document.getElementById('adminWatermark').style.display = 'block';
+        document.getElementById('csvRangeWrap').style.display = 'flex';
+    }
+    function hideAdminUI() {
+        document.getElementById('adminWatermark').style.display = 'none';
+        document.getElementById('csvRangeWrap').style.display = 'none';
+    }
+    // 간트차트(1시간 단위 표, 30분 bar) 렌더링
+    function renderGanttTimeline(reservations, spaces, startHour = 9, endHour = 20) {
+        const container = document.getElementById('ganttTimelineWrap');
+        if (!container) return;
+        
+        // 선택된 날짜가 일요일인지 확인
+        const selectedDate = document.getElementById('statusDate')?.value || getTodayStr();
+        const dateObj = new Date(selectedDate);
+        const isSunday = dateObj.getDay() === 0;
+        
+        // 일요일이면 18시까지로 조정
+        const actualEndHour = isSunday ? 18 : endHour;
+        
+        // 1시간 단위 헤더
+        const hourSlots = [];
+        const columnWidth = 180; // px, for both name and time columns (플스 등 이름이 긴 시설 대응)
+        const totalHours = actualEndHour - startHour;
+        for (let h = startHour; h < actualEndHour; h++) {
+            hourSlots.push(`${String(h).padStart(2, '0')}:00`);
+        }
+        // 헤더 (flex)
+        let html = `<div class=\"gantt-timeline-header\" style=\"display:flex;min-width:${totalHours*columnWidth+columnWidth}px;background:#fff;\">`;
+        html += '<div class=\"room-label\" style=\"width:'+columnWidth+'px;min-width:'+columnWidth+'px;max-width:'+columnWidth+'px;background:#f3f6fa;font-weight:700;color:#444;display:flex;align-items:center;justify-content:center;\"></div>';
+        hourSlots.forEach((t, i) => {
+            html += `<div class=\"time-slot\" style=\"width:${columnWidth}px;min-width:${columnWidth}px;max-width:${columnWidth}px;border-left:${i===0?'2px solid #b0b8c1':'1px solid #e0e7ef'};background:transparent;text-align:center;font-size:1.05rem;color:#888;font-weight:700;display:flex;align-items:center;justify-content:center;\">${t}</div>`;
+        });
+        html += '</div>';
+        // row (flex, no zebra)
+        const colorClasses = ['bar-blue','bar-mint','bar-pink','bar-yellow','bar-purple'];
+        spaces.forEach((space, spaceIdx) => {
+            const details = space.details || [null];
+            details.forEach((detail, detailIdx) => {
+                html += `<div class=\"gantt-timeline-row\" style=\"display:flex;position:relative;min-width:${totalHours*columnWidth+columnWidth}px;min-height:44px;align-items:center;background:#fff;border-bottom:1px dashed #e0e7ef;\">`;
+                let label = detail || space.name;
+                html += `<div class=\"room-label\" style=\"width:${columnWidth}px;min-width:${columnWidth}px;max-width:${columnWidth}px;background:#f3f6fa;font-weight:700;color:#444;display:flex;align-items:center;justify-content:center;\">${label}</div>`;
+                // 시간 칸 (세로선)
+                for (let h = 0; h < totalHours; h++) {
+                    html += `<div class=\"gantt-cell\" style=\"width:${columnWidth}px;min-width:${columnWidth}px;max-width:${columnWidth}px;border-left:${h===0?'2px solid #b0b8c1':'1px solid #e0e7ef'};background:transparent;\"></div>`;
+                }
+                // bar 계산: px 단위
+                const rowReservations = reservations.filter(r => {
+                    const facilityMatch = (r.facility === space.name) || (r.space === space.name);
+                    if (!facilityMatch) return false;
+                    const reservationDetail = r.detail || '-';
+                    const currentDetail = detail || '-';
+                    return reservationDetail === currentDetail;
+                });
+                rowReservations.forEach((res, idx) => {
+                    // left/width 계산 (px 단위)
+                    const toMinutes = t => { const [h, m] = t.split(':').map(Number); return h*60 + m; };
+                    const startMin = toMinutes(res.start_time || res.start);
+                    const endMin = toMinutes(res.end_time || res.end);
+                    let leftPx = ((startMin - startHour*60) / 60) * columnWidth + columnWidth; // columnWidth(이름칸) 보정
+                    let widthPx = ((endMin - startMin) / 60) * columnWidth;
+                    const isHalf = widthPx <= columnWidth * 0.6;
+                    const colorClass = colorClasses[(spaceIdx + detailIdx + idx) % colorClasses.length];
+                    // 지난 예약 여부 판단
+                    let isPast = false;
+                    const today = new Date();
+                    const resDate = res.date || '';
+                    let endTimeStr = res.end_time || res.end;
+                    if (resDate && endTimeStr) {
+                        let endDateTime = new Date(resDate + 'T' + (endTimeStr.length === 5 ? endTimeStr : (String(endTimeStr).padStart(2, '0') + ':00')));
+                        isPast = endDateTime < today;
+                    }
+                    // 취소된 예약 스타일
+                    let cancelledStyle = '';
+                    if (res.status === 'cancelled') {
+                        cancelledStyle = 'background:#ccc !important;color:#888 !important;opacity:0.4;text-decoration:line-through;';
+                    }
+                    html += `<div class=\"gantt-bar ${colorClass}${isPast ? ' disabled' : ''}\" style=\"left:${leftPx}px;width:${widthPx}px;position:absolute;top:3px;z-index:2;height:38px;border-radius:0;box-shadow:0 2px 8px #b2bec333;padding:0 4px;display:flex;align-items:center;justify-content:center;font-size:1.12rem;font-weight:700;background:linear-gradient(90deg,#a8edea 0%,#fed6e3 100%);color:#222;border:none;opacity:${isPast ? '0.5' : '1'};${cancelledStyle}\" data-id=\"${res.id}\" data-name=\"${res.name}\" data-start=\"${res.start_time || res.start || ''}\" data-end=\"${res.end_time || res.end || ''}\"><span class=\"bar-name\" style=\"width:100%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${isHalf ? 'font-size:0.9em;' : ''}\">${res.name}</span></div>`;
+                });
+                html += '</div>';
+            });
+        });
+        container.innerHTML = `<div class='gantt-timeline-scroll-x' style='background:#fff;'>${html}</div>`;
+        // 관리자 모드에서만 bar 클릭 시 강제취소
+        if (isAdmin()) {
+            container.querySelectorAll('.gantt-bar').forEach(bar => {
+                bar.onclick = function(e) {
+                    if (isAdmin()) {
+                        const id = bar.getAttribute('data-id');
+                        const name = bar.getAttribute('data-name');
+                        // 예약 정보 추출
+                        const reservationInfo = {
+                            name: bar.getAttribute('data-name'),
+                            facility: bar.closest('.gantt-timeline-row')?.querySelector('.room-label')?.textContent?.trim() || '',
+                            start_time: bar.getAttribute('data-start') || '',
+                            end_time: bar.getAttribute('data-end') || ''
+                        };
+                        showCancelModal(async () => {
+                            try {
+                                const res = await fetch(`/api/reservations/${id}/cancel`, { method: 'PATCH' });
+                                if (res.ok) {
+                                    showSuccessModal('예약이 강제 취소되었습니다.');
+                                    await loadAndRenderGanttTimeline(selectedCategory);
+                                } else {
+                                    alert('취소에 실패했습니다.');
+                                }
+                            } catch (err) {
+                                alert('취소 중 오류가 발생했습니다.');
+                            }
+                        }, reservationInfo);
+                        e.stopPropagation();
+                        return;
+                    }
+                    // 일반 모드: 지난 예약은 클릭 불가
+                    if (bar.classList.contains('disabled')) return;
+                    // 기존 메모 제거
+                    document.querySelectorAll('.bar-tooltip').forEach(tip => tip.remove());
+                    // 이미 열려있는 경우 닫기
+                    if (bar.classList.contains('tooltip-open')) {
+                        bar.classList.remove('tooltip-open');
+                        return;
+                    }
+                    bar.classList.add('tooltip-open');
+                    // 툴팁 생성
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'bar-tooltip';
+                    tooltip.textContent = bar.getAttribute('data-name');
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.left = (bar.offsetLeft + bar.offsetWidth + 6) + 'px';
+                    tooltip.style.top = (bar.offsetTop - 2) + 'px';
+                    tooltip.style.background = '#fff';
+                    tooltip.style.color = '#222';
+                    tooltip.style.border = '1.5px solid #b0b8c1';
+                    tooltip.style.borderRadius = '6px';
+                    tooltip.style.boxShadow = '0 2px 8px #0002';
+                    tooltip.style.padding = '6px 14px';
+                    tooltip.style.fontSize = '1.05em';
+                    tooltip.style.fontWeight = '600';
+                    tooltip.style.zIndex = 100;
+                    tooltip.style.whiteSpace = 'nowrap';
+                    tooltip.style.pointerEvents = 'none';
+                    // 툴팁 DOM 추가
+                    bar.parentElement.appendChild(tooltip);
+                    // 토글 닫기 지원
+                    bar.addEventListener('mouseleave', function removeTip() {
+                        tooltip.remove();
+                        bar.classList.remove('tooltip-open');
+                        bar.removeEventListener('mouseleave', removeTip);
+                    });
+                };
+                // 관리자 모드면 pointer-events, cursor 허용
+                if (isAdmin()) {
+                    bar.style.pointerEvents = 'auto';
+                    bar.style.cursor = 'pointer';
+                }
+            });
+        }
+    }
+    // 날짜 포맷 함수 (한국어 형식)
+    function formatDateKorean(dateStr) {
+        const d = new Date(dateStr);
+        const y = d.getFullYear();
+        const m = (d.getMonth()+1).toString().padStart(2,'0');
+        const day = d.getDate().toString().padStart(2,'0');
+        const week = ['일','월','화','수','목','금','토'][d.getDay()];
+        return `${y}년 ${m}월 ${day}일 (${week})`;
+    }
+    // 오늘 날짜 기본값 (로컬 시간대 사용)
+    function getTodayStr() {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    
+    // 날짜를 YYYY-MM-DD 형식으로 변환 (로컬 시간대 사용)
+    function formatDateToYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    // 날짜 UI 연동
+    const statusDateInput = document.getElementById('statusDate');
+    const formattedDate = document.getElementById('formattedDate');
+    function updateFormattedDate() {
+        formattedDate.textContent = formatDateKorean(statusDateInput.value);
+    }
+    statusDateInput.value = getTodayStr();
+    updateFormattedDate();
+    statusDateInput.onchange = async function() {
+        updateFormattedDate();
+        await loadAndRenderGanttTimeline(selectedCategory);
+    };
+    // 커스텀 달력 모달
+    function showCalendarModal(selectedDateStr, onSelect) {
+        // 기존 달력 모달이 있으면 먼저 제거
+        document.querySelectorAll('.calendar-modal-bg').forEach(e => e.remove());
+        let modalBg = document.createElement('div');
+        modalBg.className = 'calendar-modal-bg';
+        let today = new Date(); today.setHours(0,0,0,0);
+        let current = selectedDateStr ? new Date(selectedDateStr) : new Date();
+        let year = current.getFullYear();
+        let month = current.getMonth();
+        let selected = selectedDateStr;
+        function renderCalendar() {
+            let html = `<div class='calendar-modal'><button class='calendar-modal-close'>&times;</button><div class='calendar-header'><button class='calendar-nav-btn' id='prevMonth'>◀</button><span class='calendar-title'>${year}년 ${month+1}월</span><button class='calendar-nav-btn' id='nextMonth'>▶</button></div><table class='reservation-calendar'><thead><tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr></thead><tbody id='calendarBody'></tbody></table></div>`;
+            modalBg.innerHTML = html;
+            let firstDay = new Date(year, month, 1);
+            let startDate = new Date(firstDay); startDate.setDate(startDate.getDate() - firstDay.getDay());
+            let calendarBody = modalBg.querySelector('#calendarBody');
+            calendarBody.innerHTML = '';
+            for(let i=0;i<6;i++){
+                let row = document.createElement('tr');
+                for(let j=0;j<7;j++){
+                    let d = new Date(startDate); d.setDate(startDate.getDate()+i*7+j);
+                    let isThisMonth = d.getMonth()===month;
+                    let dateStr = formatDateToYYYYMMDD(d);
+                    let td = document.createElement('td');
+                    if(isThisMonth){
+                        td.innerHTML = `<div class='calendar-day${selected===dateStr?' selected':''}' data-date='${dateStr}'>${d.getDate()}</div>`;
+                    }
+                    row.appendChild(td);
+                }
+                calendarBody.appendChild(row);
+            }
+            // 이벤트
+            modalBg.querySelector('.calendar-modal-close').onclick = ()=>modalBg.remove();
+            modalBg.querySelector('#prevMonth').onclick = ()=>{month--; if(month<0){month=11;year--;} renderCalendar();};
+            modalBg.querySelector('#nextMonth').onclick = ()=>{month++; if(month>11){month=0;year++;} renderCalendar();};
+            calendarBody.onclick = function(e){
+                if(e.target.classList.contains('calendar-day') && !e.target.classList.contains('disabled')){
+                    selected = e.target.getAttribute('data-date');
+                    onSelect(selected);
+                    modalBg.remove();
+                }
+            };
+        }
+        renderCalendar();
+        document.body.appendChild(modalBg);
+    }
+    // 기존 달력 아이콘 클릭 이벤트 교체
+    const calendarIcon = document.getElementById('calendarIcon');
+    calendarIcon.onclick = function() {
+        showCalendarModal(statusDateInput.value, async function(dateStr){
+            statusDateInput.value = dateStr;
+            updateFormattedDate();
+            await loadAndRenderGanttTimeline(selectedCategory);
+        });
+    };
+    // 관리자 모드 시 기간/CSV UI 노출
+    let csvStart = null, csvEnd = null;
+    function updateCsvRangeBtns() {
+        document.getElementById('csvStartBtn').textContent = csvStart || '시작일';
+        document.getElementById('csvEndBtn').textContent = csvEnd || '종료일';
+    }
+    document.getElementById('csvStartBtn').onclick = function() {
+        showCalendarModal(csvStart, function(dateStr){ csvStart = dateStr; updateCsvRangeBtns(); });
+    };
+    document.getElementById('csvEndBtn').onclick = function() {
+        showCalendarModal(csvEnd, function(dateStr){ csvEnd = dateStr; updateCsvRangeBtns(); });
+    };
+    // SheetJS 라이브러리 추가
+    if (!window.XLSX) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        document.head.appendChild(script);
+    }
+    // CSV 다운로드
+    const csvBtn = document.getElementById('csvDownloadBtn');
+    csvBtn.onclick = async function() {
+        if(!csvStart || !csvEnd) { alert('기간을 모두 선택하세요.'); return; }
+        try {
+            const res = await fetch(`/api/reservations/range?start=${csvStart}&end=${csvEnd}`);
+            if (!res.ok) throw new Error('데이터를 불러올 수 없습니다.');
+            const data = await res.json();
+            // 헤더 및 데이터 준비
+            const ws_data = [
+                ['연번','이용날짜','이용시간','이름','나이','성별','이용시설','세부내역','휴대폰번호 끝 4자리','개인정보동의'],
+                ...data.map((r, idx) => [
+                    idx+1,
+                    r.date||'',
+                    `${(function(t){if(!t)return '';if(typeof t==='string'&&t.length===5)return t;if(typeof t==='string'&&t.length===4)return '0'+t;if(typeof t==='number')return (t<10?'0':'')+t+':00';return '';})(r.start_time||r.start)} ~ ${(function(t){if(!t)return '';if(typeof t==='string'&&t.length===5)return t;if(typeof t==='string'&&t.length===4)return '0'+t;if(typeof t==='number')return (t<10?'0':'')+t+':00';return '';})(r.end_time||r.end)}`,
+                    r.name||'',
+                    r.age||'',
+                    r.gender||'',
+                    r.facility||r.space||'',
+                    r.detail||'',
+                    r.phone||'',
+                    r.agreedPersonalInfo||''
+                ])
+            ];
+            // 워크시트 생성
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            // 스타일 정의
+            const headerStyle = {
+                fill: { patternType: 'solid', fgColor: { rgb: 'E0E0E0' } },
+                font: { bold: true },
+                border: {
+                    top: { style: 'thin', color: { rgb: '888888' } },
+                    bottom: { style: 'double', color: { rgb: '888888' } },
+                    left: { style: 'thin', color: { rgb: '888888' } },
+                    right: { style: 'thin', color: { rgb: '888888' } }
+                }
+            };
+            const cellBorder = {
+                border: {
+                    top: { style: 'thin', color: { rgb: '888888' } },
+                    bottom: { style: 'thin', color: { rgb: '888888' } },
+                    left: { style: 'thin', color: { rgb: '888888' } },
+                    right: { style: 'thin', color: { rgb: '888888' } }
+                }
+            };
+            // 셀 스타일 적용
+            const range = XLSX.utils.decode_range(ws['!ref']);
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+                if (ws[cellAddress]) ws[cellAddress].s = headerStyle;
+            }
+            for (let R = 1; R <= range.e.r; ++R) {
+                for (let C = range.s.c; C <= range.e.c; ++C) {
+                    const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+                    if (ws[cellAddress]) ws[cellAddress].s = cellBorder;
+                }
+            }
+            // 워크북 생성 및 시트 추가
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '예약내역');
+            XLSX.writeFile(wb, 'reservations.xlsx');
+        } catch (e) {
+            alert('엑셀 다운로드 중 오류가 발생했습니다.');
+        }
+    };
+    // 기존 코드
+    function updateActionButtons() {
+        const isAdminMode = isAdmin();
+        document.getElementById('btnBack').style.display = isAdminMode ? 'none' : '';
+        document.getElementById('btnAdmin').style.display = isAdminMode ? 'none' : '';
+        document.getElementById('btnNormal').style.display = isAdminMode ? '' : 'none';
+    }
+    document.getElementById('btnNormal').onclick = function() {
+        sessionStorage.removeItem('isAdmin');
+        location.reload();
+    };
+    document.addEventListener('DOMContentLoaded', async function() {
+        if(isAdmin()) showAdminUI(); else hideAdminUI();
+        updateActionButtons();
+        renderCategories();
+        await loadAndRenderGanttTimeline(selectedCategory);
+    });
+    // 중앙 모달 함수
+    function showCancelModal(onConfirm, reservationInfo) {
+        let modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.left = 0;
+        modal.style.top = 0;
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.35)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = 9999;
+        let infoHtml = '';
+        if (reservationInfo) {
+            infoHtml = `
+                <div style="background:#f8f9fa;padding:12px 10px 10px 10px;border-radius:8px;margin-bottom:18px;font-size:1.08em;color:#333;text-align:left;">
+                    <div><b>이름:</b> ${reservationInfo.name || ''}</div>
+                    <div><b>시설:</b> ${reservationInfo.facility || reservationInfo.space || ''}</div>
+                    <div><b>시간:</b> ${reservationInfo.start_time || reservationInfo.start || ''} ~ ${reservationInfo.end_time || reservationInfo.end || ''}</div>
+                </div>
+            `;
+        }
+        modal.innerHTML = `
+            <div style="background:#fff;padding:32px 28px;border-radius:18px;box-shadow:0 4px 24px #e74c3c22;font-size:1.15rem;font-weight:600;color:#e74c3c;text-align:center;min-width:280px;max-width:90vw;">
+                <div style="font-size:2rem;margin-bottom:16px;">❌</div>
+                <div style="margin-bottom:20px;color:#2c3e50;">정말로 이 예약을 강제 취소하시겠습니까?</div>
+                ${infoHtml}
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button style='padding:10px 24px;border-radius:12px;background:linear-gradient(90deg,#a8edea,#fed6e3);border:none;font-weight:700;font-size:1rem;color:#222;cursor:pointer;' id='modalConfirmBtn'>확인</button>
+                    <button style='padding:10px 24px;border-radius:12px;background:linear-gradient(90deg,#a8edea,#fed6e3);border:none;font-weight:700;font-size:1rem;color:#222;cursor:pointer;' id='modalCancelBtn'>취소</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('modalConfirmBtn').onclick = function() {
+            modal.remove();
+            onConfirm();
+        };
+        document.getElementById('modalCancelBtn').onclick = function() {
+            modal.remove();
+        };
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.remove();
+        });
+    }
+    // 중앙 성공 모달 함수
+    function showSuccessModal(msg) {
+        let modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.left = 0;
+        modal.style.top = 0;
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.35)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = 9999;
+        modal.innerHTML = `
+            <div style="background:#fff;padding:32px 28px;border-radius:18px;box-shadow:0 4px 24px #27ae6022;font-size:1.15rem;font-weight:600;color:#27ae60;text-align:center;min-width:220px;max-width:90vw;">
+                <div style="font-size:2rem;margin-bottom:16px;">✅</div>
+                <div style="margin-bottom:20px;">${msg}</div>
+                <button style='margin-top:8px;padding:10px 28px;border-radius:12px;background:linear-gradient(90deg,#a8edea,#fed6e3);border:none;font-weight:700;font-size:1.08rem;color:#222;cursor:pointer;' onclick='this.parentElement.parentElement.remove()'>확인</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.remove();
+        });
+    }
+    // 관리자용 모든 예약 데이터 (취소된 것 포함)
+    async function getAllReservationsForAdmin(date) {
+        if (!date) {
+            const today = new Date();
+            date = formatDateToYYYYMMDD(today);
+        }
+        
+        try {
+            const response = await fetch(`/api/reservations/date/${date}?_=${Date.now()}`, { cache: 'no-store' });
+            if (!response.ok) {
+                throw new Error('예약 데이터를 불러올 수 없습니다.');
+            }
+            
+            const reservations = await response.json();
+            
+            // API 데이터를 타임라인 형식으로 변환 (모든 예약)
+            return reservations.map(reservation => ({
+                id: reservation.id,
+                date: reservation.date,
+                space: reservation.facility,
+                detail: reservation.detail !== '-' ? reservation.detail : null,
+                start: parseInt(reservation.start_time.split(':')[0]),
+                end: parseInt(reservation.end_time.split(':')[0]),
+                start_time: reservation.start_time,
+                end_time: reservation.end_time,
+                name: reservation.name,
+                phone: reservation.phone,
+                purpose: reservation.purpose,
+                status: reservation.status
+            }));
+            
+        } catch (error) {
+            console.error('예약 데이터 로드 오류:', error);
+            return []; // 오류 시 빈 배열 반환
+        }
+    }
+    // 예약의 start~end 구간을 30분 단위로 쪼개는 함수
+    function getReservedSlots(start, end) {
+        const slots = [];
+        let [h, m] = start.split(':').map(Number);
+        const [endH, endM] = end.split(':').map(Number);
+        while (h < endH || (h === endH && m < endM)) {
+            slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+            m += 30;
+            if (m === 60) { m = 0; h += 1; }
+        }
+        return slots;
+    }
+    // loadAndRenderGanttTimeline에서 renderGanttTimeline 호출로 복구
+    async function loadAndRenderGanttTimeline(category = selectedCategory) {
+        const date = document.getElementById('statusDate')?.value || getTodayStr();
+        const response = await fetch(`/api/reservations/date/${date}?_=${Date.now()}`, { cache: 'no-store' });
+        let reservations = await response.json();
+        let filteredSpaces = (category === '전체' || !category) ? spaces : spaces.filter(s => s.name === category);
+        
+        // 선택된 날짜가 일요일인지 확인하여 운영시간 조정
+        const dateObj = new Date(date);
+        const isSunday = dateObj.getDay() === 0;
+        const endHour = isSunday ? 18 : 20;
+        
+        // status 관계없이 모든 예약 표시
+        renderGanttTimeline(reservations, filteredSpaces, 9, endHour);
+    }
+    document.addEventListener('DOMContentLoaded', () => loadAndRenderGanttTimeline(selectedCategory));
+    document.getElementById('statusDate')?.addEventListener('change', () => loadAndRenderGanttTimeline(selectedCategory));
+    </script>
+    
+    <script>
+    // 현재 시간/날짜 표시 - 디지털 시계 스타일
+    function updateDateTime() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth()+1).padStart(2,'0');
+        const d = String(now.getDate()).padStart(2,'0');
+        const h = String(now.getHours()).padStart(2,'0');
+        const min = String(now.getMinutes()).padStart(2,'0');
+        const s = String(now.getSeconds()).padStart(2,'0');
+        
+        // 요일 배열
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const weekday = weekdays[now.getDay()];
+        
+        // 디지털 시계 스타일로 표시
+        document.querySelector('.current-datetime').innerHTML = 
+            `<div style="font-size: 1rem; margin-bottom: 2px; opacity: 0.9;">${y}-${m}-${d} (${weekday})</div>
+             <div style="font-size: 1.5rem; font-weight: 800;">${h}:${min}:${s}</div>`;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // 이미지 슬라이더 기능
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.image-slider .main-building-img');
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(index) {
+        // 모든 슬라이드 숨기기
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // 현재 슬라이드 보이기
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+        showSlide(currentSlideIndex);
+    }
+
+    // 도트 클릭 이벤트
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlideIndex = index;
+            showSlide(currentSlideIndex);
+        });
+    });
+
+    // 자동 슬라이드 (3초마다)
+    setInterval(nextSlide, 3000);
+
+    // 초기 슬라이드 설정
+    showSlide(0);
+    </script>
+    <style>
+    .current-datetime {
+        position: absolute;
+        top: 16px;
+        right: 18px;
+        font-size: 1.32rem;
+        font-weight: 700;
+        color: #444;
+        margin: 0;
+        letter-spacing: 1px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: rgba(255,255,255,0.85);
+        padding: 2px 10px;
+        border-radius: 8px;
+    }
+    @media (max-width: 600px) {
+        .current-datetime {
+            text-align: center;
+            margin-right: 0;
+        }
+    }
+    </style>
+    
+</body>
+</html> 

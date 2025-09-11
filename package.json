@@ -1,0 +1,42 @@
+{
+  "name": "reservation-backend",
+  "version": "1.0.0",
+  "description": "흥덕청소년 문화의집 시설 이용 예약 시스템",
+  "main": "app.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "init-db": "node init-db.js",
+    "init-firebase": "node init-firebase.js",
+    "init-realtime": "node init-realtime-db.js",
+    "build": "npm install",
+    "postinstall": "echo 'Build completed'",
+    "cloudtype:start": "NODE_ENV=production node app.js",
+    "cloudtype:build": "npm install --production"
+  },
+  "keywords": [
+    "reservation",
+    "express",
+    "nodejs",
+    "firebase"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "body-parser": "^1.20.2",
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase": "^11.9.1",
+    "moment": "^2.29.4",
+    "puppeteer": "^21.5.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
