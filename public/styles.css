@@ -2458,11 +2458,17 @@ h1 .highlight {
     .facility-card-row {
         gap: 20px;
         justify-content: center;
+        width: 100%;
+    }
+    
+    .facility-card-row-single {
+        justify-content: flex-start;
     }
     
     .facility-card {
         padding: 24px;
         min-height: 100px;
+        flex: 0 0 auto;
     }
     
     .facility-emoji {
@@ -2472,6 +2478,52 @@ h1 .highlight {
     
     .facility-name {
         font-size: 1.2rem;
+        font-weight: 600;
+    }
+}
+
+/* 데스크톱 화면 최적화 (1024px 이상) */
+@media (min-width: 1024px) {
+    .facility-floor-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto 40px auto;
+    }
+    
+    .facility-floor-card {
+        padding: 32px;
+        border-radius: 28px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .facility-card-row {
+        gap: 24px;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .facility-card-row-single {
+        justify-content: flex-start;
+    }
+    
+    .facility-card {
+        padding: 28px;
+        min-height: 120px;
+        flex: 0 0 auto;
+    }
+    
+    .facility-emoji {
+        font-size: 2.2rem;
+    }
+    
+    .facility-name {
+        font-size: 1.1rem;
         font-weight: 600;
     }
 }
