@@ -2373,15 +2373,15 @@ h1 .highlight {
 /* 자율이용 관련 스타일 제거됨 - 가로 배열로 통합 */
 
 .facility-card {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 16px;
     padding: 20px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
-    color: white;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2405,29 +2405,29 @@ h1 .highlight {
     box-shadow: none;
 }
 
-/* 각 카드별 그라데이션 색상 - 더 진하고 대비가 좋은 색상 */
+/* 각 카드별 그라데이션 색상 - 원래 밝은 색상으로 복원 */
 .facility-card-dance {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
 }
 
 .facility-card-meeting {
-    background: linear-gradient(135deg, #16a085 0%, #138d75 100%);
+    background: linear-gradient(135deg, #4ecdc4 0%, #7fdbda 100%);
 }
 
 .facility-card-nintendo {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    background: linear-gradient(135deg, #feca57 0%, #ffd93d 100%);
 }
 
 .facility-card-playstation {
-    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+    background: linear-gradient(135deg, #a55eea 0%, #c44569 100%);
 }
 
 .facility-card-karaoke {
-    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%);
 }
 
 .facility-card-autonomous {
-    background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
 }
 
 .facility-emoji {
