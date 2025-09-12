@@ -36,59 +36,66 @@
                 </div>
             </div>
         </div>
-            <main class="rental-main">
-                <div style="text-align: center; margin: 20px 0 30px 0;">
-                    <h2 style="font-size: 1.5rem; font-weight: 800; color: #e74c3c; margin-bottom: 10px;">이용한 공간을 선택하세요</h2>
-                </div>
-                <div class="facility-floor-row">
-                    <div class="facility-floor-card">
-                        <div class="facility-floor-label">2F</div>
-                        <div class="facility-card-row facility-card-row-multi">
-                            <div class="facility-card facility-card-nintendo" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎮</div>
-                                <div class="facility-name">닌텐도</div>
-                            </div>
-                            <div class="facility-card facility-card-ps" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🕹️</div>
-                                <div class="facility-name">플레이<br>스테이션</div>
-                            </div>
+        
+        <main class="rental-main">
+            <div class="facility-selection-header">
+                <h2>이용한 공간을 선택하세요</h2>
+            </div>
+            
+            <!-- 3층 -->
+            <div class="floor-section">
+                <div class="floor-label">3층</div>
+                <div class="facility-group">
+                    <div class="facility-cards-row">
+                        <div class="facility-card" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">💃</div>
+                            <div class="facility-name">댄스연습실</div>
                         </div>
-                        <div class="facility-card-row facility-card-row-single">
-                            <div class="facility-card facility-card-karaoke" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎤</div>
-                                <div class="facility-name">노래방</div>
-                            </div>
+                        <div class="facility-card" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">🏢</div>
+                            <div class="facility-name">소회의실</div>
                         </div>
                     </div>
-                    <div class="facility-floor-card">
-                        <div class="facility-floor-label">3F</div>
-                        <div class="facility-card-row facility-card-row-multi">
-                            <div class="facility-card facility-card-dance" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">💃</div>
-                                <div class="facility-name">댄스연습실</div>
-                            </div>
-                            <div class="facility-card facility-card-meeting" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🏢</div>
-                                <div class="facility-name">소회의실</div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 20px; text-align: left;">
-                            <div class="facility-floor-label" style="margin-bottom: 15px;">자율이용</div>
-                            <div class="facility-card-row facility-card-row-single" style="justify-content: flex-start;">
-                                <div class="facility-card facility-card-other" id="autonomousCard">
-                                    <div class="facility-emoji">📚</div>
-                                    <div class="facility-name">자율이용<br>(예약 불필요)</div>
-                                </div>
+                    <div class="autonomous-section">
+                        <div class="autonomous-label">자율이용</div>
+                        <div class="facility-cards-row autonomous-row">
+                            <div class="facility-card autonomous-card" id="autonomousCard">
+                                <div class="facility-emoji">📚</div>
+                                <div class="facility-name">자율이용<br>(예약 불필요)</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-actions-centered" style="display:flex; flex-direction:row; gap:8px;">
-                    <button class="btn-secondary-centered facility-back-btn" onclick="window.location.href='index.html'">◀ 이전</button>
-                    <button class="btn-secondary-centered facility-home-btn" onclick="sessionStorage.removeItem('agreedPersonalInfo'); window.location.href='index.html'">↻ 처음으로</button>
-                </div>
+            </div>
 
-            </main>
+            <!-- 2층 -->
+            <div class="floor-section">
+                <div class="floor-label">2층</div>
+                <div class="facility-group">
+                    <div class="facility-cards-row">
+                        <div class="facility-card" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">🎮</div>
+                            <div class="facility-name">닌텐도</div>
+                        </div>
+                        <div class="facility-card" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">🎯</div>
+                            <div class="facility-name">PS5</div>
+                        </div>
+                    </div>
+                    <div class="facility-cards-row">
+                        <div class="facility-card" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">🎤</div>
+                            <div class="facility-name">노래방</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions-centered">
+                <button class="btn-secondary-centered facility-back-btn" onclick="window.location.href='index.html'">◀ 이전</button>
+                <button class="btn-secondary-centered facility-home-btn" onclick="sessionStorage.removeItem('agreedPersonalInfo'); window.location.href='index.html'">↻ 처음으로</button>
+            </div>
+        </main>
     </div>
 
     <script>
@@ -116,664 +123,114 @@
         modal.className = 'custom-modal-bg';
         modal.innerHTML = `
             <div class="custom-modal" style="max-width: 500px;">
-                <div class="custom-modal-content" style="text-align: center; margin-bottom: 20px;">
-                    <h3 style="color: #3498db; margin-bottom: 15px;">자율이용 세부 선택</h3>
-                    <p style="color: #666; font-size: 0.9rem;">이용 목적을 선택해주세요</p>
+                <div class="custom-modal-header">
+                    <h3>자율이용 안내</h3>
+                    <button class="custom-modal-close" onclick="this.closest('.custom-modal-bg').remove()">×</button>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
-                    <button class="autonomous-option-btn" data-option="보드게임">보드게임</button>
-                    <button class="autonomous-option-btn" data-option="프로그램 참여">프로그램 참여</button>
-                    <button class="autonomous-option-btn" data-option="동아리 활동">동아리 활동</button>
-                    <button class="autonomous-option-btn" data-option="학습 활동">학습 활동</button>
-                    <button class="autonomous-option-btn" data-option="기타 활동" style="grid-column: 1 / -1;">기타 활동</button>
+                <div class="custom-modal-body">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">📚</div>
+                        <h4 style="color: #2c3e50; margin-bottom: 15px;">자율이용 공간</h4>
+                        <p style="color: #7f8c8d; line-height: 1.6; margin-bottom: 20px;">
+                            자율이용 공간은 예약 없이 자유롭게 이용할 수 있는 공간입니다.<br>
+                            언제든지 방문하여 이용하실 수 있습니다.
+                        </p>
+                        <div style="background: #ecf0f1; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                            <h5 style="color: #2c3e50; margin-bottom: 10px;">📋 이용 안내</h5>
+                            <ul style="text-align: left; color: #7f8c8d; line-height: 1.8;">
+                                <li>예약 없이 자유롭게 이용 가능</li>
+                                <li>이용 시간 제한 없음</li>
+                                <li>다른 이용자와 함께 공유하여 사용</li>
+                                <li>이용 후 정리정돈 필수</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <button class="custom-modal-btn" onclick="this.closest('.custom-modal-bg').remove()">취소</button>
+                <div class="custom-modal-footer">
+                    <button class="btn-primary" onclick="this.closest('.custom-modal-bg').remove()">확인</button>
+                </div>
             </div>
         `;
+        
         document.body.appendChild(modal);
-        console.log('자율이용 모달 생성 완료');
-
+        
         // 모달 배경 클릭 시 닫기
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.remove();
             }
         });
-
-        // 옵션 버튼 스타일
-        const style = document.createElement('style');
-        style.textContent = `
-            .autonomous-option-btn {
-                padding: 15px 10px;
-                border: 2px solid #e0e7ef;
-                border-radius: 12px;
-                background: #fff;
-                color: #3498db;
-                font-weight: 600;
-                font-size: 0.95rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            .autonomous-option-btn:hover {
-                border-color: #3498db;
-                background: #f8f9fa;
-            }
-            .autonomous-option-btn.selected {
-                background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
-                border-color: #3498db;
-                color: #222;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // 옵션 선택 이벤트
-        modal.querySelectorAll('.autonomous-option-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                modal.querySelectorAll('.autonomous-option-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                // 선택된 옵션 저장하고 바로 예약 완료로 이동
-                setTimeout(() => {
-                    const selectedOption = this.getAttribute('data-option');
-                    sessionStorage.setItem('selectedFacility', '자율이용');
-                    sessionStorage.setItem('selectedDetail', selectedOption);
-                    sessionStorage.setItem('autonomousUse', 'true'); // 자율이용 플래그
-                    modal.remove();
-                    
-                    // 자율이용은 바로 예약 완료 처리
-                    createAutonomousReservation(selectedOption);
-                }, 200);
-            });
-        });
     };
 
-    // 자율이용 예약 생성 함수
-    window.createAutonomousReservation = async function(selectedOption) {
-        const userName = localStorage.getItem('userName') || '고객';
-        const userPhone = localStorage.getItem('userPhone') || '';
-        const userGender = localStorage.getItem('userGender') || '';
-        const userAge = localStorage.getItem('userAge') || '';
-        
-        const reservationData = {
-            name: userName,
-            phone: userPhone || undefined,
-            gender: userGender || undefined,
-            age: userAge || undefined,
-            facility: '자율이용',
-            detail: selectedOption,
-            date: new Date().toISOString().split('T')[0], // 오늘 날짜
-            start_time: '09:00',
-            end_time: '18:00',
-            status: 'active'
-        };
-        
-        try {
-            const response = await fetch('/api/reservations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(reservationData)
-            });
-            
-            if (response.ok) {
-                // 예약 완료 페이지로 이동
-                sessionStorage.setItem('reservationComplete', 'true');
-                sessionStorage.setItem('reservationData', JSON.stringify(reservationData));
-                window.location.href = 'reservation-complete.html';
-            } else {
-                showModal('예약 생성 중 오류가 발생했습니다.');
-            }
-        } catch (error) {
-            console.error('예약 생성 오류:', error);
-            showModal('예약 생성 중 오류가 발생했습니다.');
-        }
-    };
-
-    window.showModal = function(message) {
-        let modal = document.createElement('div');
-        modal.className = 'custom-modal-bg';
-        modal.innerHTML = `
-            <div class="custom-modal">
-                <div class="custom-modal-content">${message}</div>
-                <button class="custom-modal-btn">확인</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        modal.querySelector('.custom-modal-btn').onclick = () => modal.remove();
-    };
-
-    window.addEventListener('DOMContentLoaded', function() {
-        if (sessionStorage.getItem('agreedPersonalInfo') !== 'y') {
-            alert('개인정보 수집 및 이용에 동의해야 예약이 가능합니다.');
-            window.location.href = 'rental.html';
-        }
-        
-        // 버튼 이벤트 명시적 바인딩
-        const backBtn = document.querySelector('.facility-back-btn');
-        const homeBtn = document.querySelector('.facility-home-btn');
-        
-        if (backBtn) {
-            backBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'index.html';
-            });
-        }
-        
-        if (homeBtn) {
-            homeBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                sessionStorage.removeItem('agreedPersonalInfo');
-                window.location.href = 'index.html';
-            });
-        }
-        
-        // 자율이용 카드 클릭 이벤트 바인딩
+    // DOM이 로드된 후 자율이용 카드 클릭 이벤트 설정
+    document.addEventListener('DOMContentLoaded', function() {
         const autonomousCard = document.getElementById('autonomousCard');
         if (autonomousCard) {
             autonomousCard.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('자율이용 카드 클릭됨');
                 showAutonomousUseModal();
             });
-            console.log('자율이용 카드 이벤트 바인딩 완료');
-        } else {
-            console.error('자율이용 카드를 찾을 수 없습니다');
         }
     });
-    </script>
-    
-    <script>
-    // 이미지 슬라이더 기능
-    let currentSlideIndex = 0;
-    const slides = document.querySelectorAll('.image-slider .main-building-img');
+
+    // 현재 시간 표시
+    function updateDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const weekday = weekdays[now.getDay()];
+        
+        const dateTimeElement = document.querySelector('.current-datetime');
+        if (dateTimeElement) {
+            dateTimeElement.innerHTML = `
+                <div class="datetime-info">
+                    <span class="date">${year}-${month}-${day} (${weekday})</span>
+                    <span class="time">${hours}:${minutes}:${seconds}</span>
+                </div>
+            `;
+        }
+    }
+
+    // 페이지 로드 시 시간 표시 및 주기적 업데이트
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // 이미지 슬라이더
+    let currentImageIndex = 0;
+    const images = document.querySelectorAll('.main-building-img');
     const dots = document.querySelectorAll('.dot');
 
-    function showSlide(index) {
-        // 모든 슬라이드 숨기기
-        slides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
-        
-        // 현재 슬라이드 보이기
-        slides[index].classList.add('active');
-        dots[index].classList.add('active');
+    function showImage(index) {
+        images.forEach((img, i) => {
+            img.classList.toggle('active', i === index);
+        });
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
     }
 
-    function nextSlide() {
-        currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-        showSlide(currentSlideIndex);
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        showImage(currentImageIndex);
     }
+
+    // 자동 슬라이더 시작
+    setInterval(nextImage, 3000);
 
     // 도트 클릭 이벤트
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
-            currentSlideIndex = index;
-            showSlide(currentSlideIndex);
+            currentImageIndex = index;
+            showImage(currentImageIndex);
         });
-    });
-
-    // 자동 슬라이드 (3초마다)
-    setInterval(nextSlide, 3000);
-
-    // 초기 슬라이드 설정
-    showSlide(0);
-    
-    // 현재 시간/날짜 표시 - 디지털 시계 스타일
-    function updateDateTime() {
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth()+1).padStart(2,'0');
-        const d = String(now.getDate()).padStart(2,'0');
-        const h = String(now.getHours()).padStart(2,'0');
-        const min = String(now.getMinutes()).padStart(2,'0');
-        const s = String(now.getSeconds()).padStart(2,'0');
-        
-        // 요일 배열
-        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-        const weekday = weekdays[now.getDay()];
-        
-        // 디지털 시계 스타일로 표시
-        document.querySelector('.current-datetime').innerHTML = 
-            `<div style="font-size: 1rem; margin-bottom: 2px; opacity: 0.9;">${y}-${m}-${d} (${weekday})</div>
-             <div style="font-size: 1.5rem; font-weight: 800;">${h}:${min}:${s}</div>`;
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-
-    
-    // 전역 함수로 정의 - API에서 데이터 가져오기
-    window.initProgramSlider = async function() {
-        try {
-            console.log('프로그램 데이터 로딩 시작...');
-            const response = await fetch('/api/programs');
-            const programs = await response.json();
-            
-            console.log('프로그램 데이터 로딩 완료:', programs.length, '개');
-            
-            const sliderTrack = document.getElementById('programSliderTrack');
-            const sliderDots = document.getElementById('programSliderDots');
-            
-            if (!sliderTrack || !sliderDots) {
-                console.error('슬라이더 요소를 찾을 수 없습니다');
-                return;
-            }
-            
-            // 프로그램 카드 HTML 생성
-            const cardsHTML = programs.map((program, index) => `
-                <div class="program-card ${index === 0 ? 'active' : ''}">
-                    <div class="program-image">
-                        <img src="${program.image}" alt="${program.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlPC90ZXh0Pjwvc3ZnPg=='">
-                    </div>
-                    <div class="program-content">
-                        <h4 class="program-title">${program.title}</h4>
-                        <div class="program-periods">
-                            <div class="period-item">
-                                <span class="period-label">신청기간</span>
-                                <span class="period-value">${program.applicationPeriod}</span>
-                            </div>
-                            <div class="period-item">
-                                <span class="period-label">참여기간</span>
-                                <span class="period-value">${program.participationPeriod}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            // 도트 HTML 생성
-            const dotsHTML = programs.map((_, index) => 
-                `<span class="program-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></span>`
-            ).join('');
-            
-            // HTML 업데이트
-            sliderTrack.innerHTML = cardsHTML;
-            sliderDots.innerHTML = dotsHTML;
-            
-            // 슬라이더 기능 초기화
-            const cards = document.querySelectorAll('.program-card');
-            const dots = document.querySelectorAll('.program-dot');
-            let currentIndex = 0;
-
-            function showSlide(index) {
-                cards.forEach(card => card.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('active'));
-                
-                if (cards[index]) cards[index].classList.add('active');
-                if (dots[index]) dots[index].classList.add('active');
-            }
-
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % programs.length;
-                showSlide(currentIndex);
-            }
-
-            // 도트 클릭 이벤트
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    currentIndex = index;
-                    showSlide(currentIndex);
-                });
-            });
-
-            // 자동 슬라이드 (5초마다)
-            setInterval(nextSlide, 5000);
-            
-            console.log('프로그램 슬라이더 초기화 완료');
-            
-        } catch (error) {
-            console.error('프로그램 데이터 로딩 실패:', error);
-            // 오류 시 기본 메시지 표시
-            const sliderTrack = document.getElementById('programSliderTrack');
-            if (sliderTrack) {
-                sliderTrack.innerHTML = '<div style="padding: 40px; text-align: center; color: #666;">프로그램 정보를 불러올 수 없습니다.</div>';
-            }
-        }
-    };
-
-    // 페이지 로드 후 슬라이더들 시작
-    document.addEventListener('DOMContentLoaded', function() {
-        // 간단한 프로그램 슬라이더 초기화
-        const cards = document.querySelectorAll('.program-card');
-        const dots = document.querySelectorAll('.program-dot');
-        let currentIndex = 0;
-
-        function showSlide(index) {
-            cards.forEach(card => card.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            
-            if (cards[index]) cards[index].classList.add('active');
-            if (dots[index]) dots[index].classList.add('active');
-        }
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % cards.length;
-            showSlide(currentIndex);
-        }
-
-        // 도트 클릭 이벤트
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentIndex = index;
-                showSlide(currentIndex);
-            });
-        });
-
-        // 자동 슬라이드 (5초마다)
-        setInterval(nextSlide, 5000);
-        
-        console.log('프로그램 슬라이더 초기화 완료');
     });
     </script>
-    <style>
-    .form-actions-centered {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 8px !important;
-    }
-    .rental-main {
-        margin-top: 40px !important;
-        max-width: 100% !important;
-        padding: 0 !important;
-        width: 100% !important;
-    }
-    .facility-floor-row {
-        gap: 30px !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 0 !important;
-    }
-    .facility-floor-card {
-        margin-bottom: 20px !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 24px !important;
-    }
-    
-    .facility-card-other {
-        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%) !important;
-        cursor: pointer !important;
-        transition: all 0.3s ease !important;
-        pointer-events: auto !important;
-        position: relative !important;
-        z-index: 10 !important;
-        user-select: none !important;
-        flex: 1 1 0 !important;
-        min-width: 110px !important;
-        max-width: 140px !important;
-        min-height: 120px !important;
-    }
-    
-    #autonomousCard {
-        cursor: pointer !important;
-        pointer-events: auto !important;
-    }
-    
-    /* 시계 스타일 */
-    .current-datetime {
-        position: absolute;
-        top: 16px;
-        right: 18px;
-        font-size: 1.32rem;
-        font-weight: 700;
-        color: #444;
-        margin: 0;
-        letter-spacing: 1px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: rgba(255,255,255,0.85);
-        padding: 2px 10px;
-        border-radius: 8px;
-    }
-    @media (max-width: 600px) {
-        .current-datetime {
-            text-align: center;
-            margin-right: 0;
-        }
-    }
-    .facility-card-other:hover {
-        transform: translateY(-4px) scale(1.04) !important;
-        box-shadow: 0 8px 24px rgba(255, 154, 158, 0.3) !important;
-    }
-    .form-actions-centered button {
-        padding: 20px 50px !important;
-        font-size: 1.3rem !important;
-        min-width: 200px !important;
-        white-space: nowrap !important;
-        flex: 1 !important;
-    }
-    
-    /* 자율이용 모달 스타일 */
-    .custom-modal-bg {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background: rgba(0, 0, 0, 0.5) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 9999 !important;
-    }
-    
-    .custom-modal {
-        background: white !important;
-        border-radius: 20px !important;
-        padding: 30px !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
-        max-width: 90vw !important;
-        width: 100% !important;
-    }
-    
-    .custom-modal-btn {
-        background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%) !important;
-        color: #222 !important;
-        border: none !important;
-        border-radius: 12px !important;
-        padding: 12px 24px !important;
-        font-weight: 700 !important;
-        cursor: pointer !important;
-        width: 100% !important;
-        margin-top: 10px !important;
-    }
-
-
-    /* 프로그램 슬라이더 스타일 */
-    .program-slider-section {
-        margin: 30px 0;
-        padding: 20px;
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-        border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        border: 3px solid #ff4757;
-    }
-
-    .program-slider-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .program-slider-header h3 {
-        color: #2c3e50;
-        font-size: 1.3rem;
-        font-weight: 700;
-        margin: 0;
-    }
-
-    .more-link {
-        color: #3498db;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        padding: 8px 16px;
-        border: 2px solid #3498db;
-        border-radius: 20px;
-        transition: all 0.3s ease;
-    }
-
-    .more-link:hover {
-        background: #3498db;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .program-slider-container {
-        position: relative;
-        overflow: hidden;
-        border-radius: 15px;
-        background: white;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .program-slider-track {
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-    }
-
-    .program-card {
-        min-width: 100%;
-        display: none;
-        padding: 20px;
-        background: white;
-    }
-
-    .program-card.active {
-        display: block;
-    }
-
-    .program-image {
-        width: 100%;
-        height: 200px;
-        margin-bottom: 15px;
-        border-radius: 10px;
-        overflow: hidden;
-        background: #f8f9fa;
-    }
-
-    .program-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    .program-content {
-        padding: 0 10px;
-    }
-
-    .program-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 15px;
-        line-height: 1.4;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .program-periods {
-        margin-bottom: 15px;
-    }
-
-    .period-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    .period-item:last-child {
-        border-bottom: none;
-    }
-
-    .period-label {
-        font-size: 0.9rem;
-        color: #666;
-        font-weight: 600;
-    }
-
-    .period-value {
-        font-size: 0.9rem;
-        color: #3498db;
-        font-weight: 700;
-    }
-
-
-    .program-slider-dots {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        padding: 15px 0;
-        background: #f8f9fa;
-    }
-
-    .program-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: rgba(52, 152, 219, 0.3);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .program-dot.active {
-        background-color: #3498db;
-        transform: scale(1.2);
-    }
-
-    .program-dot:hover {
-        background-color: #3498db;
-        transform: scale(1.1);
-    }
-
-    /* 반응형 디자인 */
-    @media (max-width: 768px) {
-        /* 프로그램 슬라이더 모바일 스타일 */
-        .program-slider-section {
-            margin: 20px 0;
-            padding: 15px;
-        }
-
-        .program-slider-header {
-            flex-direction: column;
-            gap: 10px;
-            text-align: center;
-        }
-
-        .program-slider-header h3 {
-            font-size: 1.1rem;
-        }
-
-        .more-link {
-            font-size: 0.8rem;
-            padding: 6px 12px;
-        }
-
-        .program-card {
-            padding: 15px;
-        }
-
-        .program-image {
-            height: 150px;
-        }
-
-        .program-title {
-            font-size: 1rem;
-        }
-
-        .period-label, .period-value {
-            font-size: 0.8rem;
-        }
-
-    }
-    </style>
-    
 </body>
-</html> 
+</html>
