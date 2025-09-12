@@ -230,7 +230,7 @@ body {
 
 /* 정보 섹션 */
 .info-section {
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    background: transparent;
     margin: 10px 10px 15px 10px;
     border-radius: 20px;
     padding: 15px;
@@ -2844,6 +2844,14 @@ section h2 {
     margin-bottom: 10px;
     line-height: 1.3;
     text-align: left;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .program-periods {
@@ -2873,6 +2881,9 @@ section h2 {
     font-size: 0.85rem;
     color: #3498db;
     font-weight: 700;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-height: 1.2;
 }
 
 .period-value.no-info {
@@ -2907,6 +2918,64 @@ section h2 {
     opacity: 0.7;
 }
 
+/* 태블릿 반응형 (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .program-section {
+        margin: 25px 15px;
+        padding: 18px;
+    }
+
+    .program-header h3 {
+        font-size: 1.3rem;
+        line-height: 1.4;
+    }
+
+    .program-track {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .program-card {
+        padding: 16px;
+        height: 200px;
+        margin: 0 5px;
+    }
+
+    .program-title {
+        font-size: 1rem;
+        line-height: 1.3;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .facility-name {
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+    }
+
+    .program-periods {
+        margin-top: 8px;
+    }
+
+    .period-item {
+        margin-bottom: 6px;
+    }
+
+    .period-label, .period-value {
+        font-size: 0.75rem;
+    }
+
+    .period-value {
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+}
+
 /* 모바일 반응형 */
 @media (max-width: 768px) {
     .program-section {
@@ -2939,9 +3008,16 @@ section h2 {
         height: 200px;
     }
 
-
     .program-title {
         font-size: 0.9rem;
+        line-height: 1.3;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .period-label, .period-value {
