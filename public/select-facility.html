@@ -37,7 +37,7 @@
             </div>
         </div>
         
-        <main class="rental-main">
+            <main class="rental-main">
             <div class="facility-selection-header">
                 <h2>이용한 공간을 선택하세요</h2>
             </div>
@@ -47,22 +47,21 @@
                 <!-- 2층 -->
                 <div class="floor-section">
                     <div class="floor-label">2층</div>
-                    <div class="facility-group">
-                        <div class="facility-cards-row">
+                    <div class="facility-grid">
                             <div class="facility-card facility-card-nintendo" onclick="window.location.href='reservation-date.html'">
                                 <div class="facility-emoji">🎮</div>
                                 <div class="facility-name">닌텐도</div>
                             </div>
-                            <div class="facility-card facility-card-playstation" onclick="window.location.href='reservation-date.html'">
+                        <div class="facility-card facility-card-playstation" onclick="window.location.href='reservation-date.html'">
                                 <div class="facility-emoji">🕹️</div>
-                                <div class="facility-name">플레이스테이션</div>
-                            </div>
+                            <div class="facility-name">플레이스테이션</div>
                         </div>
-                        <div class="facility-cards-row">
                             <div class="facility-card facility-card-karaoke" onclick="window.location.href='reservation-date.html'">
                                 <div class="facility-emoji">🎤</div>
                                 <div class="facility-name">노래방</div>
                             </div>
+                        <div class="facility-card facility-card-empty">
+                            <!-- 빈 공간 -->
                         </div>
                     </div>
                 </div>
@@ -70,8 +69,7 @@
                 <!-- 3층 -->
                 <div class="floor-section">
                     <div class="floor-label">3층</div>
-                    <div class="facility-group">
-                        <div class="facility-cards-row">
+                    <div class="facility-grid">
                             <div class="facility-card facility-card-dance" onclick="window.location.href='reservation-date.html'">
                                 <div class="facility-emoji">💃</div>
                                 <div class="facility-name">댄스연습실</div>
@@ -80,20 +78,22 @@
                                 <div class="facility-emoji">🏢</div>
                                 <div class="facility-name">소회의실</div>
                             </div>
-                            <div class="facility-card facility-card-autonomous" id="autonomousCard">
-                                <div class="facility-emoji">📚</div>
-                                <div class="facility-name">자율이용<br>(예약 불필요)</div>
-                            </div>
+                        <div class="facility-card facility-card-autonomous" id="autonomousCard">
+                            <div class="facility-emoji">📚</div>
+                            <div class="facility-name">자율이용<br>(예약 불필요)</div>
+                        </div>
+                        <div class="facility-card facility-card-empty">
+                            <!-- 빈 공간 -->
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="form-actions-centered">
-                <button class="btn-secondary-centered facility-back-btn" onclick="window.location.href='index.html'">◀ 이전</button>
-                <button class="btn-secondary-centered facility-home-btn" onclick="sessionStorage.removeItem('agreedPersonalInfo'); window.location.href='index.html'">↻ 처음으로</button>
-            </div>
-        </main>
+                    <button class="btn-secondary-centered facility-back-btn" onclick="window.location.href='index.html'">◀ 이전</button>
+                    <button class="btn-secondary-centered facility-home-btn" onclick="sessionStorage.removeItem('agreedPersonalInfo'); window.location.href='index.html'">↻ 처음으로</button>
+                </div>
+            </main>
     </div>
 
     <script>
@@ -151,7 +151,7 @@
         `;
         
         document.body.appendChild(modal);
-        
+
         // 모달 배경 클릭 시 닫기
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -217,13 +217,13 @@
     // 자동 슬라이더 시작
     setInterval(nextImage, 3000);
 
-    // 도트 클릭 이벤트
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
+            // 도트 클릭 이벤트
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
             currentImageIndex = index;
             showImage(currentImageIndex);
         });
     });
     </script>
 </body>
-</html>
+</html> 

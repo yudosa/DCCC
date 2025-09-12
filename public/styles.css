@@ -2361,64 +2361,73 @@ h1 .highlight {
     border-bottom: 2px solid #ecf0f1;
 }
 
-.facility-group {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.facility-cards-row {
-    display: flex;
+.facility-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+    aspect-ratio: 1;
+    min-height: 300px;
 }
 
 /* 자율이용 관련 스타일 제거됨 - 가로 배열로 통합 */
 
 .facility-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     border-radius: 16px;
     padding: 20px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 120px;
-    flex: 1;
-    max-width: 150px;
     border: 2px solid transparent;
     color: white;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
 }
 
 .facility-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
-/* 각 카드별 그라데이션 색상 */
+.facility-card-empty {
+    background: transparent;
+    cursor: default;
+    border: none;
+}
+
+.facility-card-empty:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* 각 카드별 그라데이션 색상 - 더 진하고 대비가 좋은 색상 */
 .facility-card-dance {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
 }
 
 .facility-card-meeting {
-    background: linear-gradient(135deg, #4ecdc4 0%, #7fdbda 100%);
+    background: linear-gradient(135deg, #16a085 0%, #138d75 100%);
 }
 
 .facility-card-nintendo {
-    background: linear-gradient(135deg, #feca57 0%, #ffd93d 100%);
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
 }
 
 .facility-card-playstation {
-    background: linear-gradient(135deg, #a55eea 0%, #c44569 100%);
+    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
 }
 
 .facility-card-karaoke {
-    background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%);
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
 }
 
 .facility-card-autonomous {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
 }
 
 .facility-emoji {
@@ -2444,14 +2453,14 @@ h1 .highlight {
         padding: 20px;
     }
     
-    .facility-cards-row {
+    .facility-grid {
         gap: 12px;
+        min-height: 250px;
     }
     
     .facility-card {
         padding: 16px;
-        min-width: 100px;
-        max-width: 120px;
+        min-height: 100px;
     }
     
     .facility-emoji {
@@ -2472,14 +2481,14 @@ h1 .highlight {
         padding: 28px;
     }
     
-    .facility-cards-row {
+    .facility-grid {
         gap: 20px;
+        min-height: 320px;
     }
     
     .facility-card {
         padding: 24px;
-        min-width: 130px;
-        max-width: 160px;
+        min-height: 130px;
     }
     
     .facility-emoji {
@@ -2500,14 +2509,14 @@ h1 .highlight {
         padding: 32px;
     }
     
-    .facility-cards-row {
+    .facility-grid {
         gap: 24px;
+        min-height: 350px;
     }
     
     .facility-card {
         padding: 28px;
-        min-width: 140px;
-        max-width: 170px;
+        min-height: 140px;
     }
     
     .facility-emoji {
