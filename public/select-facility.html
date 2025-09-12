@@ -44,6 +44,29 @@
             
             <!-- 층별 섹션 가로 배치 -->
             <div class="floors-container">
+                <!-- 2층 -->
+                <div class="floor-section">
+                    <div class="floor-label">2층</div>
+                    <div class="facility-group">
+                        <div class="facility-cards-row">
+                            <div class="facility-card facility-card-nintendo" onclick="window.location.href='reservation-date.html'">
+                                <div class="facility-emoji">🎮</div>
+                                <div class="facility-name">닌텐도</div>
+                            </div>
+                            <div class="facility-card facility-card-playstation" onclick="window.location.href='reservation-date.html'">
+                                <div class="facility-emoji">🕹️</div>
+                                <div class="facility-name">플레이스테이션</div>
+                            </div>
+                        </div>
+                        <div class="facility-cards-row">
+                            <div class="facility-card facility-card-karaoke" onclick="window.location.href='reservation-date.html'">
+                                <div class="facility-emoji">🎤</div>
+                                <div class="facility-name">노래방</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 3층 -->
                 <div class="floor-section">
                     <div class="floor-label">3층</div>
@@ -57,37 +80,9 @@
                                 <div class="facility-emoji">🏢</div>
                                 <div class="facility-name">소회의실</div>
                             </div>
-                        </div>
-                        <div class="autonomous-section">
-                            <div class="autonomous-label">자율이용</div>
-                            <div class="facility-cards-row autonomous-row">
-                                <div class="facility-card facility-card-autonomous" id="autonomousCard">
-                                    <div class="facility-emoji">📚</div>
-                                    <div class="facility-name">자율이용<br>(예약 불필요)</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2층 -->
-                <div class="floor-section">
-                    <div class="floor-label">2층</div>
-                    <div class="facility-group">
-                        <div class="facility-cards-row">
-                            <div class="facility-card facility-card-nintendo" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎮</div>
-                                <div class="facility-name">닌텐도</div>
-                            </div>
-                            <div class="facility-card facility-card-ps5" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎯</div>
-                                <div class="facility-name">PS5</div>
-                            </div>
-                        </div>
-                        <div class="facility-cards-row">
-                            <div class="facility-card facility-card-karaoke" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎤</div>
-                                <div class="facility-name">노래방</div>
+                            <div class="facility-card facility-card-autonomous" id="autonomousCard">
+                                <div class="facility-emoji">📚</div>
+                                <div class="facility-name">자율이용<br>(예약 불필요)</div>
                             </div>
                         </div>
                     </div>
@@ -192,12 +187,7 @@
         
         const dateTimeElement = document.querySelector('.current-datetime');
         if (dateTimeElement) {
-            dateTimeElement.innerHTML = `
-                <div class="datetime-info">
-                    <span class="date">${year}-${month}-${day} (${weekday})</span>
-                    <span class="time">${hours}:${minutes}:${seconds}</span>
-                </div>
-            `;
+            dateTimeElement.innerHTML = `${year}-${month}-${day} (${weekday})<br>${hours}:${minutes}:${seconds}`;
         }
     }
 

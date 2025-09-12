@@ -2374,23 +2374,7 @@ h1 .highlight {
     flex-wrap: wrap;
 }
 
-.autonomous-section {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #ecf0f1;
-}
-
-.autonomous-label {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #3498db;
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.autonomous-row {
-    justify-content: flex-start;
-}
+/* 자율이용 관련 스타일 제거됨 - 가로 배열로 통합 */
 
 .facility-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -2425,7 +2409,7 @@ h1 .highlight {
     background: linear-gradient(135deg, #feca57 0%, #ffd93d 100%);
 }
 
-.facility-card-ps5 {
+.facility-card-playstation {
     background: linear-gradient(135deg, #a55eea 0%, #c44569 100%);
 }
 
