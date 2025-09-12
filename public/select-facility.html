@@ -42,28 +42,33 @@
                 <h2>이용한 공간을 선택하세요</h2>
             </div>
             
-            <!-- 층별 섹션 가로 배치 -->
-            <div class="floors-container">
+            <!-- 층별 섹션 삼각형 배치 -->
+            <div class="floors-container-triangle">
                 <!-- 2층 -->
                 <div class="floor-section">
                     <div class="floor-label">2층</div>
                     <div class="facility-grid">
-                            <div class="facility-card facility-card-nintendo" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎮</div>
-                                <div class="facility-name">닌텐도</div>
-                            </div>
+                        <div class="facility-card facility-card-nintendo" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">🎮</div>
+                            <div class="facility-name">닌텐도</div>
+                        </div>
                         <div class="facility-card facility-card-playstation" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🕹️</div>
+                            <div class="facility-emoji">🕹️</div>
                             <div class="facility-name">플레이스테이션</div>
                         </div>
-                            <div class="facility-card facility-card-karaoke" onclick="window.location.href='reservation-date.html'">
-                                <div class="facility-emoji">🎤</div>
-                                <div class="facility-name">노래방</div>
-                            </div>
+                        <div class="facility-card facility-card-karaoke" onclick="window.location.href='reservation-date.html'">
+                            <div class="facility-emoji">🎤</div>
+                            <div class="facility-name">노래방</div>
+                        </div>
                         <div class="facility-card facility-card-empty">
                             <!-- 빈 공간 -->
                         </div>
                     </div>
+                </div>
+
+                <!-- 자율이용 헤더만 중앙에 -->
+                <div class="autonomous-header">
+                    <div class="floor-label">자율이용</div>
                 </div>
 
                 <!-- 3층 -->
@@ -87,9 +92,8 @@
                     </div>
                 </div>
 
-                <!-- 자율이용 -->
-                <div class="floor-section autonomous-section">
-                    <div class="floor-label">자율이용</div>
+                <!-- 자율이용 카드 -->
+                <div class="autonomous-card-section">
                     <div class="facility-grid autonomous-grid">
                         <div class="facility-card facility-card-autonomous" id="autonomousCard">
                             <div class="facility-emoji">📚</div>

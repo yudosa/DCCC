@@ -2337,11 +2337,44 @@ h1 .highlight {
     margin: 0;
 }
 
-.floors-container {
+.floors-container-triangle {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto auto;
     gap: 24px;
     margin-bottom: 40px;
+    align-items: start;
+}
+
+.floors-container-triangle .floor-section:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.autonomous-header {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.floors-container-triangle .floor-section:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.autonomous-card-section {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    margin-top: 20px;
 }
 
 .floor-section {
@@ -2371,14 +2404,9 @@ h1 .highlight {
 }
 
 /* 자율이용 섹션만 높이를 2/3로 줄임 */
-.autonomous-section {
-    margin: 0 auto;
-    max-width: 66.67%; /* 2/3 너비로 중앙 정렬 */
-}
-
 .autonomous-grid {
     min-height: 200px; /* 기존 300px의 2/3 */
-    aspect-ratio: 1.5; /* 가로가 더 긴 비율 */
+    aspect-ratio: 1; /* 정사각형 비율 유지 */
 }
 
 /* 자율이용 관련 스타일 제거됨 - 가로 배열로 통합 */
@@ -2456,9 +2484,30 @@ h1 .highlight {
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-    .floors-container {
+    .floors-container-triangle {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
         gap: 20px;
+    }
+    
+    .floors-container-triangle .floor-section:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    
+    .autonomous-header {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    
+    .floors-container-triangle .floor-section:nth-child(3) {
+        grid-column: 1;
+        grid-row: 3;
+    }
+    
+    .autonomous-card-section {
+        grid-column: 1;
+        grid-row: 4;
     }
     
     .floor-section {
@@ -2472,10 +2521,6 @@ h1 .highlight {
     
     .autonomous-grid {
         min-height: 167px; /* 모바일에서도 2/3 비율 유지 */
-    }
-    
-    .autonomous-section {
-        max-width: 100%; /* 모바일에서는 전체 너비 사용 */
     }
     
     .facility-card {
@@ -2493,7 +2538,7 @@ h1 .highlight {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-    .floors-container {
+    .floors-container-triangle {
         gap: 28px;
     }
     
@@ -2525,7 +2570,7 @@ h1 .highlight {
 }
 
 @media (min-width: 1024px) {
-    .floors-container {
+    .floors-container-triangle {
         gap: 32px;
     }
     
