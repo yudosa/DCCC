@@ -668,6 +668,9 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 280px;
     }
 
     .info-card::before {
@@ -700,6 +703,7 @@
         margin-bottom: 10px;
         padding-bottom: 8px;
         border-bottom: 2px solid #f0f0f0;
+        min-height: 70px;
     }
 
     .card-title {
@@ -742,18 +746,19 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        flex: 1;
     }
 
     .contact-item {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 10px;
+        padding: 12px 10px;
         background: rgba(102, 126, 234, 0.05);
         border-radius: 10px;
         border-left: 4px solid #667eea;
         transition: all 0.3s ease;
-        min-height: 44px;
+        min-height: 48px;
     }
 
     .contact-item:hover {
@@ -787,12 +792,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 10px;
+        padding: 12px 10px;
         background: rgba(240, 147, 251, 0.05);
         border-radius: 10px;
         border-left: 4px solid #f093fb;
         transition: all 0.3s ease;
-        min-height: 44px;
+        min-height: 48px;
     }
 
     .hours-item:hover {
@@ -880,9 +885,9 @@
         }
 
         .contact-item, .hours-item {
-            padding: 10px 12px;
+            padding: 12px 12px;
             gap: 10px;
-            min-height: 44px;
+            min-height: 48px;
         }
 
         .contact-item i {
@@ -934,9 +939,9 @@
         }
 
         .contact-item, .hours-item {
-            padding: 10px 10px;
+            padding: 12px 10px;
             gap: 8px;
-            min-height: 44px;
+            min-height: 48px;
         }
 
         .contact-label, .contact-value, .hours-label, .hours-value {
