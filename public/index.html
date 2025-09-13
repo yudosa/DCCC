@@ -253,7 +253,7 @@
             <div class="card-content">
                 <div class="hours-item">
                     <span class="hours-label">화~토요일</span>
-                    <span class="hours-value">09:00~20:00</span>
+                    <span class="hours-value">여름 09:00~20:00<br>겨울 09:00~18:00</span>
                 </div>
                 <div class="hours-item">
                     <span class="hours-label">일요일</span>
@@ -795,13 +795,18 @@
     .hours-item {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         padding: 12px 10px;
         background: rgba(240, 147, 251, 0.05);
         border-radius: 10px;
         border-left: 4px solid #f093fb;
         transition: all 0.3s ease;
         min-height: 48px;
+    }
+
+    .hours-item:first-child {
+        min-height: 60px;
+        align-items: center;
     }
 
     .hours-item:hover {
@@ -819,6 +824,8 @@
         font-weight: 700;
         color: #2c3e50;
         font-size: 0.9rem;
+        line-height: 1.4;
+        white-space: pre-line;
     }
 
     .hours-value.closed {
@@ -894,6 +901,10 @@
             min-height: 48px;
         }
 
+        .hours-item:first-child {
+            min-height: 60px;
+        }
+
         .hours-card .card-content {
             gap: 4px;
         }
@@ -950,6 +961,10 @@
             padding: 12px 10px;
             gap: 8px;
             min-height: 48px;
+        }
+
+        .hours-item:first-child {
+            min-height: 60px;
         }
 
         .hours-card .card-content {
