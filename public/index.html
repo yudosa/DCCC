@@ -252,15 +252,15 @@
             </div>
             <div class="card-content">
                 <div class="hours-item">
-                    <span class="hours-label">화~토</span>
+                    <span class="hours-label">화~토요일</span>
                     <span class="hours-value">09:00~20:00</span>
                 </div>
                 <div class="hours-item">
-                    <span class="hours-label">일</span>
+                    <span class="hours-label">일요일</span>
                     <span class="hours-value">09:00~18:00</span>
                 </div>
                 <div class="hours-item">
-                    <span class="hours-label">공휴일</span>
+                    <span class="hours-label">월요일·공휴일</span>
                     <span class="hours-value closed">휴무</span>
                 </div>
             </div>
@@ -748,11 +748,12 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 8px 10px;
+        padding: 10px 10px;
         background: rgba(102, 126, 234, 0.05);
         border-radius: 10px;
         border-left: 4px solid #667eea;
         transition: all 0.3s ease;
+        min-height: 44px;
     }
 
     .contact-item:hover {
@@ -786,11 +787,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 10px;
+        padding: 10px 10px;
         background: rgba(240, 147, 251, 0.05);
         border-radius: 10px;
         border-left: 4px solid #f093fb;
         transition: all 0.3s ease;
+        min-height: 44px;
     }
 
     .hours-item:hover {
@@ -880,6 +882,7 @@
         .contact-item, .hours-item {
             padding: 10px 12px;
             gap: 10px;
+            min-height: 44px;
         }
 
         .contact-item i {
@@ -931,8 +934,9 @@
         }
 
         .contact-item, .hours-item {
-            padding: 8px 10px;
+            padding: 10px 10px;
             gap: 8px;
+            min-height: 44px;
         }
 
         .contact-label, .contact-value, .hours-label, .hours-value {
