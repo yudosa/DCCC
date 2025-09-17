@@ -69,95 +69,6 @@
             </div>
         </div>
 
-        <!-- 용인시청소년미래재단 프로그램 섹션 -->
-        <div class="program-section">
-            <div class="program-header">
-                <h3>용인시청소년미래재단의 다양한 프로그램을 참여해보세요</h3>
-                <a href="https://www.yiyf.or.kr" target="_blank" class="more-link">더보기</a>
-            </div>
-            <div class="program-container">
-                <div class="program-track" id="programTrack">
-        <div class="program-card active">
-            <div class="program-image">
-                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop&crop=center" alt="수지청소년문화의집 '수지맞은 베이킹교실 4차' 활동" onerror="this.src='https://via.placeholder.com/400x200/3498db/ffffff?text=베이킹교실+4차'">
-            </div>
-                        <div class="program-content">
-                            <h4 class="program-title">수지청소년문화의집 '수지맞은 베이킹교실 4차' 활동</h4>
-                            <div class="program-periods">
-                                <div class="period-item">
-                                    <span class="period-label">신청기간</span>
-                                    <span class="period-value">2025-07-23 ~ 2025-08-01</span>
-                                </div>
-                                <div class="period-item">
-                                    <span class="period-label">참여기간</span>
-                                    <span class="period-value">2025-08-02 ~ 2025-08-30</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <div class="program-card">
-            <div class="program-image">
-                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=200&fit=crop&crop=center" alt="수지청소년문화의집 '수지맞은 베이킹교실 3차' 활동" onerror="this.src='https://via.placeholder.com/400x200/e74c3c/ffffff?text=베이킹교실+3차'">
-            </div>
-                        <div class="program-content">
-                            <h4 class="program-title">수지청소년문화의집 '수지맞은 베이킹교실 3차' 활동</h4>
-                            <div class="program-periods">
-                                <div class="period-item">
-                                    <span class="period-label">신청기간</span>
-                                    <span class="period-value">2025-06-19 ~ 2025-07-04</span>
-                                </div>
-                                <div class="period-item">
-                                    <span class="period-label">참여기간</span>
-                                    <span class="period-value">2025-07-05 ~ 2025-07-26</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <div class="program-card">
-            <div class="program-image">
-                <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop&crop=center" alt="유림청소년문화의집 청소년이 배우는 역사의 진실 '청.사.진' 활동공유" onerror="this.src='https://via.placeholder.com/400x200/9b59b6/ffffff?text=청.사.진+활동'">
-            </div>
-                        <div class="program-content">
-                            <h4 class="program-title">유림청소년문화의집 청소년이 배우는 역사의 진실 '청.사.진' 활동공유</h4>
-                            <div class="program-periods">
-                                <div class="period-item">
-                                    <span class="period-label">신청기간</span>
-                                    <span class="period-value">2025-08-30 ~ 2025-09-13</span>
-                                </div>
-                                <div class="period-item">
-                                    <span class="period-label">참여기간</span>
-                                    <span class="period-value">2025-08-30 ~ 2025-09-13</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <div class="program-card">
-            <div class="program-image">
-                <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=200&fit=crop&crop=center" alt="처인성어울림센터 아트살롱 1회차 활동" onerror="this.src='https://via.placeholder.com/400x200/f39c12/ffffff?text=아트살롱'">
-            </div>
-                        <div class="program-content">
-                            <h4 class="program-title">처인성어울림센터 아트살롱 1회차 활동</h4>
-                            <div class="program-periods">
-                                <div class="period-item">
-                                    <span class="period-label">신청기간</span>
-                                    <span class="period-value">2025-08-12 ~ 2025-08-19</span>
-                                </div>
-                                <div class="period-item">
-                                    <span class="period-label">참여기간</span>
-                                    <span class="period-value">2025-09-06 ~ 2025-09-06</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="program-dots" id="programDots">
-                    <span class="program-dot active" data-index="0"></span>
-                    <span class="program-dot" data-index="1"></span>
-                    <span class="program-dot" data-index="2"></span>
-                    <span class="program-dot" data-index="3"></span>
-                </div>
-            </div>
-        </div>
 
         <main>
             <section id="tab-cancel" class="tab-section" style="display:none;">
@@ -214,6 +125,7 @@
                 <div id="reservationsList" class="reservations-list"></div>
             </section>
         </main>
+        
         <div id="notification" class="notification"></div>
     </div>
 
@@ -330,6 +242,9 @@
     // 초기 슬라이드 설정
     showSlide(0);
 
+    // 포스터 슬라이더 기능
+    // 포스터 슬라이더 제거됨
+
     // 전역 함수로 정의
     window.initLogoSlider = function() {
         const sliderTrack = document.getElementById('logoSliderTrack');
@@ -422,141 +337,19 @@
         });
     }
 
-    // 프로그램 슬라이더 초기화
-    function initProgramSlider() {
-        const programTrack = document.getElementById('programTrack');
-        const programDots = document.querySelector('.program-dots');
-        let currentIndex = 0;
-        let programs = [];
-
-        // API에서 프로그램 데이터 가져오기
-        async function loadPrograms() {
-            try {
-                console.log('프로그램 데이터 로딩 중...');
-                const response = await fetch('/api/programs');
-                programs = await response.json();
-                console.log(`${programs.length}개 프로그램 로딩 완료`);
-                
-                // 프로그램 카드 동적 생성
-                renderPrograms();
-                
-                // 슬라이더 초기화
-                initSlider();
-                
-            } catch (error) {
-                console.error('프로그램 로딩 실패:', error);
-                // 기본 데이터 사용
-                programs = [
-                    {
-                        title: "수지청소년문화의집 '수지맞은 베이킹교실 4차' 활동",
-                        image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop&crop=center",
-                        applicationPeriod: "2025-07-23 ~ 2025-08-01",
-                        participationPeriod: "2025-08-02 ~ 2025-08-30"
-                    },
-                    {
-                        title: "수지청소년문화의집 '수지맞은 베이킹교실 3차' 활동",
-                        image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=200&fit=crop&crop=center",
-                        applicationPeriod: "2025-06-19 ~ 2025-07-04",
-                        participationPeriod: "2025-07-05 ~ 2025-07-26"
-                    },
-                    {
-                        title: "유림청소년문화의집 청소년이 배우는 역사의 진실 '청.사.진' 활동공유",
-                        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop&crop=center",
-                        applicationPeriod: "2025-08-30 ~ 2025-09-13",
-                        participationPeriod: "2025-08-30 ~ 2025-09-13"
-                    },
-                    {
-                        title: "처인성어울림센터 아트살롱 1회차 활동",
-                        image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=200&fit=crop&crop=center",
-                        applicationPeriod: "2025-08-12 ~ 2025-08-19",
-                        participationPeriod: "2025-09-06 ~ 2025-09-06"
-                    }
-                ];
-                renderPrograms();
-                initSlider();
-            }
-        }
-
-        // 프로그램 카드 렌더링
-        function renderPrograms() {
-            programTrack.innerHTML = '';
-            programDots.innerHTML = '';
-
-            programs.forEach((program, index) => {
-                // 시설명과 프로그램명 분리
-                const titleParts = program.title.split(' ');
-                const facilityName = titleParts[0]; // 첫 번째 부분이 시설명
-                const programName = titleParts.slice(1).join(' '); // 나머지가 프로그램명
-                
-                // 프로그램 카드 생성
-                const card = document.createElement('div');
-                card.className = `program-card ${index === 0 ? 'active' : ''}`;
-                card.innerHTML = `
-                    <div class="program-content">
-                        <div class="facility-name">${facilityName}</div>
-                        <h4 class="program-title">${programName}</h4>
-                        <div class="program-periods">
-                            <div class="period-item">
-                                <span class="period-label">신청기간</span>
-                                <span class="period-value ${!program.applicationPeriod ? 'no-info' : ''}">${program.applicationPeriod || '정보 없음'}</span>
-                            </div>
-                            <div class="period-item">
-                                <span class="period-label">참여기간</span>
-                                <span class="period-value ${!program.participationPeriod ? 'no-info' : ''}">${program.participationPeriod || '정보 없음'}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                programTrack.appendChild(card);
-
-                // 도트 생성
-                const dot = document.createElement('div');
-                dot.className = `program-dot ${index === 0 ? 'active' : ''}`;
-                dot.addEventListener('click', () => {
-                    currentIndex = index;
-                    showSlide(currentIndex);
-                });
-                programDots.appendChild(dot);
-            });
-        }
-
-        function showSlide(index) {
-            const cards = document.querySelectorAll('.program-card');
-            const dots = document.querySelectorAll('.program-dot');
-            
-            cards.forEach(card => card.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            
-            if (cards[index]) cards[index].classList.add('active');
-            if (dots[index]) dots[index].classList.add('active');
-        }
-
-        function initSlider() {
-            const cards = document.querySelectorAll('.program-card');
-            const dots = document.querySelectorAll('.program-dot');
-
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % cards.length;
-                showSlide(currentIndex);
-            }
-
-            // 자동 슬라이드 (5초마다)
-            setInterval(nextSlide, 5000);
-        }
-
-        // 프로그램 데이터 로드 시작
-        loadPrograms();
-        
-        // 5분마다 프로그램 데이터 새로고침
-        setInterval(() => {
-            console.log('프로그램 데이터 새로고침 중...');
-            loadPrograms();
-        }, 5 * 60 * 1000); // 5분 = 5 * 60 * 1000ms
-    }
-
-    // 페이지 로드 후 프로그램 슬라이더 시작
+    // 페이지 로드 후 초기화
     document.addEventListener('DOMContentLoaded', function() {
-        initProgramSlider();
+        // 탭 기능 초기화
+        initTabs();
+        
+        // 시설 선택 기능 초기화
+        initFacilitySelection();
+        
+        // 예약 폼 초기화
+        initReservationForm();
+        
+        // 이용 현황 기능 초기화
+        initStatusTab();
     });
 
     </script>
@@ -658,6 +451,8 @@
         margin: 20px 0 15px 0;
         padding: 0 10px;
     }
+
+    /* 포스터 슬라이더 스타일 제거됨 */
 
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -870,6 +665,7 @@
 
     /* 반응형 디자인 */
     @media (max-width: 768px) {
+        /* 포스터 슬라이더 모바일 스타일 제거됨 */
         .info-section {
             grid-template-columns: 1fr;
             gap: 15px;
@@ -930,6 +726,7 @@
     }
     
     @media (max-width: 480px) {
+        /* 포스터 슬라이더 모바일 스타일 제거됨 */
         .info-section {
             margin: 12px 0 8px 0;
             padding: 0 10px;
@@ -992,6 +789,10 @@
             gap: 12px;
         }
     }
+    
+    
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
     </style>
     
 </body>
